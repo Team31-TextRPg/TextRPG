@@ -9,7 +9,6 @@ namespace TextRPG
     {
         static void Main(string[] args)
         {
-
             GameManager gm = new GameManager();
 
             gm.MainScreen();

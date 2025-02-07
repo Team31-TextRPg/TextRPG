@@ -5,7 +5,10 @@ namespace TextRPG
 {
     public class Battle
     {
-        public bool isClear { get; set; }
+        public int isClear { get; set; }
+        //  isClear == 0 이면 전투 진행중
+        //             1 이면 성공
+        //             2 면 실패
         public Player player { get; set; }
         public List<Monster> monsters { get; set; }
         public List<Monster> battleMonsters { get; set; }
@@ -13,7 +16,7 @@ namespace TextRPG
         //  Battle 클래스 생성자
         public Battle(Player player, List<Monster> monsters)
         {
-            isClear = false;
+            isClear = 0;
             this.player = player;
             this.monsters = monsters;
             battleMonsters = new List<Monster>();
@@ -36,7 +39,7 @@ namespace TextRPG
 
             while (true)
             {
-                if(battleMonsters.Count == monsterCount)
+                if (battleMonsters.Count == monsterCount)
                 {
                     break;
                 }
@@ -53,13 +56,31 @@ namespace TextRPG
             float min = -1 * player.attack / 10.0f;
             float max = player.attack / 10.0f;
 
-            int randomAttack = (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
+            int randomAttack = (int)player.attack + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
 
-            battleMonsters[monsterNum - 1].Hp -= (int)player.attack + randomAttack;
+            Console.Clear();
+            Console.WriteLine("Battle!!");
+            Console.WriteLine();
+            Console.WriteLine($"{player.character} 의 공격!");
+            Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
+            Console.WriteLine();
+            Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name}");
+            Console.Write($"HP {battleMonsters[monsterNum - 1].Hp} -> ");
+
+            battleMonsters[monsterNum - 1].Hp -= randomAttack;
 
             if (battleMonsters[monsterNum - 1].Hp <= 0)
             {
                 battleMonsters[monsterNum - 1].IsDead = true;
+            }
+
+            if (battleMonsters[monsterNum - 1].IsDead)
+            {
+                Console.WriteLine("Dead");
+            }
+            else
+            {
+                Console.WriteLine($"{battleMonsters[monsterNum - 1].Hp}");
             }
 
             //  현재 몇 마리의 몬스터가 죽었는지 계산
@@ -76,11 +97,7 @@ namespace TextRPG
             //  몬스터가 전부 죽었으면 던전 클리어
             if (deadCount == battleMonsters.Count)
             {
-
-                isClear = true;
-                
-                //  전투 결과 창으로 이동
-                //  isClear가 true이기 때문에 Victory창으로 이동
+                isClear = 1;
             }
         }
 
@@ -96,15 +113,33 @@ namespace TextRPG
                     float min = -1 * battleMonsters[i].Atk / 10.0f;
                     float max = battleMonsters[i].Atk / 10.0f;
 
-                    int randomAttack = (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
+                    int randomAttack = battleMonsters[i].Atk + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
 
-                    player.health -= battleMonsters[i].Atk + randomAttack;
+                    Console.Clear();
+                    Console.WriteLine("Battle!!");
+                    Console.WriteLine();
+                    Console.WriteLine($"LV.{battleMonsters[i].Level} {battleMonsters[i].Name} 의 공격!");
+                    Console.WriteLine($"{player.character} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
+                    Console.WriteLine();
+                    Console.WriteLine($"LV.{player.level} {player.character}");
+                    Console.Write($"HP {player.health} -> ");
 
-                    if(player.health <= 0)
+                    player.health -= randomAttack;
+
+                    if (player.health <= 0)
                     {
-                        isClear = false;
-                        //  전투 결과 창으로 이동
-                        //  isClear가 false이기 때문에 You Lose창으로 이동
+                        Console.WriteLine("Dead");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{player.health}");
+                    }
+
+                    Thread.Sleep(1000);
+
+                    if (player.health <= 0)
+                    {
+                        isClear = 2;
                     }
                 }
             }
