@@ -20,27 +20,30 @@ namespace TextRPG
         public int maxHealth { get; private set; }
         public int gold { get; private set; }
 
-        public Player(string name, string job, int level, int attackPower, int defensePower, int health, int gold) // 플레이어 생성자
+        public Player(string name, string job, int level, int attackPower, int defensePower,int currentHealth, int health, int gold) // 플레이어 생성자
         {
             character = name;
             jobClass = job;
-            level = level;
+            this.level = level;
             attack = attackPower;
             defense = defensePower;
+            this.health = currentHealth;
             maxHealth = health;
-            gold = gold;
+            this.gold = gold;
         }
         public void ShowStatus()
         {
+            Console.Clear();
             Console.WriteLine("상태 보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
-            Console.WriteLine($"Lv. {level}");
+            Console.WriteLine($"Lv. {level.ToString("00")}");
             Console.WriteLine($"{character} ({jobClass})");
             Console.WriteLine($"공격력: {attack}");
             Console.WriteLine($"방어력: {defense}");
             Console.WriteLine($"체 력: {health} / {maxHealth}");
             Console.WriteLine($"Gold: {gold} G");
+            Console.WriteLine();
             Console.WriteLine("1");
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
