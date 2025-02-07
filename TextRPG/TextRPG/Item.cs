@@ -15,10 +15,10 @@ public class Item
     public string Description {get;}
     public bool IsUsed {get; set;}
 
-    public Item (string name, string type, int value, string description, bool isUsed = false)
+    public Item (string name, ItemType type, int value, string description, bool isUsed = false) //아이템 생성자
     {
         Name = name;
-        Type = Type;
+        Type = type;
         Value = value;
         Description = description;
         IsUsed = false;
