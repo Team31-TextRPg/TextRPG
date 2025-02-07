@@ -73,7 +73,9 @@ namespace TextRPG
             //  몬스터가 전부 죽었으면 던전 클리어
             if (deadCount == battleMonsters.Count)
             {
+
                 isClear = true;
+                
                 //  전투 결과 창으로 이동
                 //  isClear가 true이기 때문에 Victory창으로 이동
             }
