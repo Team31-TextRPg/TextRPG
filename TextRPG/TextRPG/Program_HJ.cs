@@ -1,5 +1,15 @@
 namespace TextRPG;
 
+class Program
+{
+    static void Main(string[] args)
+    {
+        GameManager gm = new GameManager();
+        gm.PlayerInventoryScreen();
+    }
+}
+
+
 class GameManager
 {
     Player player;
