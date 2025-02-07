@@ -19,6 +19,9 @@ namespace TextRPG
             battleMonsters = new List<Monster>();
         }
 
+
+
+
         //  전투 시작
         public void StartBattle()
         {
