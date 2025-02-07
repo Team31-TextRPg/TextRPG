@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Monster;
+namespace MonsterClass;
 
 public class Monster
 {
@@ -26,14 +26,8 @@ public class Monster
     }
 
     public string DeadString()
-    {   
+    {
         string str = IsDead ? "Dead" : $"HP {Hp}";
         return str;
     }
 }
-
-
-
-
-
-
