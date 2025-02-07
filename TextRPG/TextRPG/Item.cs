@@ -21,7 +21,7 @@ public class Item
         Type = type;
         Value = value;
         Description = description;
-        IsUsed = false;
+        IsUsed = isUsed;
     }
 
     public string ItemDisplay() // 좀 이상함. 장착 관련 부분 차용했는데 
