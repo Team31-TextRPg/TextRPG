@@ -8,14 +8,14 @@ using System.Xml.Linq;
 
 namespace TextRPG
 {
-    internal class Player
+    public class Player
     {
         public string character { get; private set; }
         public string jobClass { get; private set; }
         public int level { get; private set; }
         public int attack { get; private set; }
         public int defense { get; private set; }
-        public int health { get; private set; }
+        public int health { get; set; }
         public int maxHealth { get; private set; }
         public int gold { get; private set; }
 
