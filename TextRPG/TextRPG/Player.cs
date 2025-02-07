@@ -30,16 +30,23 @@ namespace TextRPG
             maxHealth = health;
             gold = gold;
         }
-
         public void ShowStatus()
         {
+            Console.WriteLine("상태 보기");
+            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+            Console.WriteLine();
             Console.WriteLine($"Lv. {level}");
             Console.WriteLine($"{character} ({jobClass})");
             Console.WriteLine($"공격력: {attack}");
             Console.WriteLine($"방어력: {defense}");
             Console.WriteLine($"체 력: {health} / {maxHealth}");
             Console.WriteLine($"Gold: {gold} G");
+            Console.WriteLine("1");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+
         }
+
     }
 }
 
