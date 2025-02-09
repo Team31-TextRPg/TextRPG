@@ -61,7 +61,7 @@ namespace TextRPG
             Console.Clear();
             Console.WriteLine("Battle!!");
             Console.WriteLine();
-            Console.WriteLine($"{player.name} 의 공격!");
+            Console.WriteLine($"{player.character} 의 공격!");
             Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
             Console.WriteLine();
             Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name}");
@@ -119,9 +119,9 @@ namespace TextRPG
                     Console.WriteLine("Battle!!");
                     Console.WriteLine();
                     Console.WriteLine($"LV.{battleMonsters[i].Level} {battleMonsters[i].Name} 의 공격!");
-                    Console.WriteLine($"{player.name} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
+                    Console.WriteLine($"{player.character} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
                     Console.WriteLine();
-                    Console.WriteLine($"LV.{player.Level} {player.character}");
+                    Console.WriteLine($"LV.{player.level} {player.character}");
                     Console.Write($"HP {player.health} -> ");
 
                     player.health -= randomAttack;
