@@ -59,13 +59,21 @@ namespace TextRPG
             int randomAttack = (int)player.attack + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
 
             Console.Clear();
-            Console.WriteLine("Battle!!");
+            ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
             Console.WriteLine();
             Console.WriteLine($"{player.character} 의 공격!");
-            Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
+            Console.Write("Lv.");
+            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Level} ", ConsoleColor.DarkRed);
+            Console.Write($"{ battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : ");
+            ConsoleUtility.ColorWrite( $"{randomAttack}", ConsoleColor.DarkRed);
+            Console.WriteLine("]");
             Console.WriteLine();
-            Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name}");
-            Console.Write($"HP {battleMonsters[monsterNum - 1].Hp} -> ");
+            Console.Write("Lv.");
+            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Level} ", ConsoleColor.DarkRed);
+            Console.WriteLine($"{battleMonsters[monsterNum - 1].Name}");
+            Console.Write("HP ");
+            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
+            Console.Write("-> ");
 
             battleMonsters[monsterNum - 1].Hp -= randomAttack;
 
@@ -76,11 +84,11 @@ namespace TextRPG
 
             if (battleMonsters[monsterNum - 1].IsDead)
             {
-                Console.WriteLine("Dead");
+                ConsoleUtility.ColorWriteLine("Dead" , ConsoleColor.DarkGray);
             }
             else
             {
-                Console.WriteLine($"{battleMonsters[monsterNum - 1].Hp}");
+                ConsoleUtility.ColorWriteLine($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
             }
 
             //  현재 몇 마리의 몬스터가 죽었는지 계산
@@ -116,13 +124,21 @@ namespace TextRPG
                     int randomAttack = battleMonsters[i].Atk + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
 
                     Console.Clear();
-                    Console.WriteLine("Battle!!");
+                    ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
                     Console.WriteLine();
-                    Console.WriteLine($"LV.{battleMonsters[i].Level} {battleMonsters[i].Name} 의 공격!");
-                    Console.WriteLine($"{player.character} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
+                    Console.Write("Lv.");
+                    ConsoleUtility.ColorWrite($"{battleMonsters[i].Level} ", ConsoleColor.DarkRed);
+                    Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : ");
+                    ConsoleUtility.ColorWrite($"{randomAttack}", ConsoleColor.DarkRed);
+                    Console.WriteLine("]");
                     Console.WriteLine();
-                    Console.WriteLine($"LV.{player.level} {player.character}");
-                    Console.Write($"HP {player.health} -> ");
+                    Console.Write("Lv.");
+                    ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
+                    Console.WriteLine($"{player.character}");
+                    Console.Write($"HP ");
+                    ConsoleUtility.ColorWrite($"{player.health} ", ConsoleColor.DarkRed);
+                    Console.Write("-> ");
+
 
                     player.health -= randomAttack;
 
@@ -132,10 +148,10 @@ namespace TextRPG
                     }
                     else
                     {
-                        Console.WriteLine($"{player.health}");
+                        ConsoleUtility.ColorWriteLine($"{player.health} ", ConsoleColor.DarkRed);
                     }
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
 
                     if (player.health <= 0)
                     {
