@@ -55,12 +55,22 @@ namespace TextRPG
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
             Console.WriteLine("원하시는 이름을 입력해주세요:  ");
             string playername = Console.ReadLine();
-            player.character = playername;
+            player.character = playername;  
             Console.WriteLine();
-            Console.WriteLine("원하시는 직업을 선택해주세요");
-            Console.WriteLine("1. 전사  /  2. 궁수  /  3. 도적");
-            string playerjob = Console.ReadLine();
-            player.jobClass = playerjob;
+            int playerJob = cu.JobInput(1, 3);
+            switch (playerJob)
+            {
+                case 1:
+                    player.Warrior();
+                    break;
+                case 2:
+                    player.Archer();
+                    break;
+                case 3:
+                    player.Theif();
+                    break;
+            }
+
             Console.Clear();
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
