@@ -9,11 +9,10 @@ namespace TextRPG
         static void Main(string[] args)
         {
             GameManager gm = new GameManager();
-            gm.MainScreen();
-           
+            gm.IntroScreen();
+
         }
     }
-
 
     //  게임이 시작될 때 필요한 모든 것들을 생성하는 클래스
     public class GameManager
@@ -38,19 +37,41 @@ namespace TextRPG
             };
 
             itemList = new List<Item>
-        {
-            new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
-            new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
-            new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true)
-        };
+            {
+                new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
+                new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
+                new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true)
+            };
         }
 
-
-        public void MainScreen()
+        public void IntroScreen()
         {
             ConsoleUtility.Loading();
             Console.Clear();
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+            Console.WriteLine("원하시는 이름을 입력해주세요:  ");
+            string playername = Console.ReadLine();
+            player.character = playername;
+            Console.WriteLine();
+            int playerJob = cu.JobInput(1, 3);
+            switch (playerJob)
+            {
+                case 1:
+                    player.Warrior();
+                    break;
+                case 2:
+                    player.Archer();
+                    break;
+                case 3:
+                    player.Theif();
+                    break;
+            }
+            MainScreen();
+        }
+
+        public void MainScreen()
+        {
+            Console.Clear();
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
@@ -91,7 +112,6 @@ namespace TextRPG
             {
                 battle.StartBattle();
                 battle.start = true;
-                Console.Write(battle.start);
             }
 
 
@@ -100,23 +120,30 @@ namespace TextRPG
             Console.WriteLine();
             for (int i = 0; i < battle.battleMonsters.Count; i++)
             {
-                Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                if (battle.battleMonsters[i].IsDead == true)
+                {
+                    ConsoleUtility.ColorWriteLine(battle.battleMonsters[i].MonsterDisplay(), ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                }
             }
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("[내정보]");
             Console.Write("Lv.");
             ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
-            Console.WriteLine($" {player.character} ({ player.jobClass})");
+            Console.WriteLine($" {player.character} ({player.jobClass})");
             Console.Write("HP ");
-            ConsoleUtility.ColorWrite($"{player.health}",ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
             Console.Write("/");
-            ConsoleUtility.ColorWriteLine($"{player.maxHealth} ",ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWriteLine($"{player.maxHealth} ", ConsoleColor.DarkRed);
             Console.WriteLine();
             Console.WriteLine("1. 공격");
             Console.WriteLine("0. 도망치기");
             int input = cu.GetInput(0, 1);
-            switch(input)
+            switch (input)
             {
                 case 0:
                     MainScreen();
@@ -125,7 +152,7 @@ namespace TextRPG
                     AttackScreen(battle);
                     break;
             }
-           
+
 
         }
         public void AttackScreen(Battle battle)
@@ -133,12 +160,20 @@ namespace TextRPG
             Console.Clear();
             ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
             Console.WriteLine();
+
             for (int i = 0; i < battle.battleMonsters.Count; i++)
             {
-                //Console.WriteLine($"{i + 1} " + battle.battleMonsters[i].MonsterDisplay());
                 ConsoleUtility.ColorWrite($"{i + 1} ", ConsoleColor.Blue);
-                Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                if (battle.battleMonsters[i].IsDead == true)
+                {
+                    ConsoleUtility.ColorWriteLine(battle.battleMonsters[i].MonsterDisplay(), ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                }
             }
+
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("[내정보]");
@@ -159,46 +194,47 @@ namespace TextRPG
             }
             else if (input >= 1 && input <= battle.battleMonsters.Count)
             {
-                battle.PlayerAttack(input);
-
-                Console.WriteLine();
-                Console.WriteLine("0. 다음");
-                Console.WriteLine();
-
-                int next = cu.GetInput(0, 0);
-
-                if (battle.isClear == 0)
+                if (battle.battleMonsters[input - 1].IsDead == true)
                 {
-                    battle.EnemyPhase();
+                    Console.WriteLine("그 대상은 선택할 수 없습니다.");
+                    Thread.Sleep(1000);
+                    AttackScreen(battle);
+                }
+                else
+                {
+                    battle.PlayerAttack(input);
 
                     Console.WriteLine();
                     Console.WriteLine("0. 다음");
                     Console.WriteLine();
 
+                    int next = cu.GetInput(0, 0);
+
                     if (battle.isClear == 0)
                     {
-                        AttackScreen(battle);
-                    }
-                    else if (battle.isClear == 1)
-                    {
-                        BattleResultWin(battle);
-                    }
-                    else if (battle.isClear == 2)
-                    {
-                        BattleResultLose(battle);
+                        battle.EnemyPhase();
+
+                        Console.WriteLine();
+                        Console.WriteLine("0. 다음");
+                        Console.WriteLine();
+
+                        if (battle.isClear == 0)
+                        {
+                            AttackScreen(battle);
+                        }
+                        else if (battle.isClear == 1)
+                        {
+                            BattleResultWin(battle);
+                        }
+                        else if (battle.isClear == 2)
+                        {
+                            BattleResultLose(battle);
+                        }
+
                     }
 
                 }
-                else if(battle.isClear == 1)
-                {
-                    BattleResultWin(battle);
-                }
-                else if(battle.isClear == 2)
-                {
-                    BattleResultLose(battle);
-                }  
             }
-
 
         }
         public void BattleResultWin(Battle battle)
@@ -236,9 +272,9 @@ namespace TextRPG
             ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
             Console.WriteLine($" {player.character} ({player.jobClass})");
             Console.Write("HP ");
-            ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);      //player.maxhealth를 플레이어의 현재 체력 상황을 불러오는 식으로
             Console.Write(" -> ");
-            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"Dead", ConsoleColor.DarkRed);
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -293,7 +329,7 @@ namespace TextRPG
         // 아이템 사용 매서드 
         public int UsePotion(Item item)
         {
-            
+
             Console.Clear();
             ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
             Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
@@ -317,7 +353,7 @@ namespace TextRPG
                     Console.WriteLine();
                 }
             }
-         
+
             Console.WriteLine("1. 사용하기");
             Console.WriteLine("0. 나가기");
             int input = cu.GetInput(0, 1);
