@@ -44,7 +44,7 @@ namespace TextRPG
                     break;
                 }
 
-                battleMonsters.Add(randomMonsters[rand.Next(0, randomMonsters.Count)]);
+                battleMonsters.Add((Monster)randomMonsters[rand.Next(0, randomMonsters.Count)].Clone());
             }
         }
 
