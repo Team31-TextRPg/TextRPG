@@ -128,6 +128,7 @@ namespace TextRPG
                     Console.WriteLine();
                     Console.Write("Lv.");
                     ConsoleUtility.ColorWrite($"{battleMonsters[i].Level} ", ConsoleColor.DarkRed);
+                    Console.WriteLine($"{ battleMonsters[i].Name} 의 공격!");
                     Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : ");
                     ConsoleUtility.ColorWrite($"{randomAttack}", ConsoleColor.DarkRed);
                     Console.WriteLine("]");

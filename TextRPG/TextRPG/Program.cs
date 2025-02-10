@@ -96,7 +96,14 @@ namespace TextRPG
             Console.WriteLine();
             for (int i = 0; i < battle.battleMonsters.Count; i++)
             {
-                Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                if (battle.battleMonsters[i].IsDead == true)
+                {
+                    ConsoleUtility.ColorWriteLine(battle.battleMonsters[i].MonsterDisplay(), ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                }
             }
             Console.WriteLine();
             Console.WriteLine();
@@ -151,6 +158,7 @@ namespace TextRPG
             int input = cu.GetBattleInput(0, battle.battleMonsters.Count);
             if (input == 0)
             {
+<<<<<<< Updated upstream
                 BattleScreen();
             }
             else if (input >= 1 && input <= battle.battleMonsters.Count)
@@ -161,9 +169,60 @@ namespace TextRPG
                     {
                         battle.PlayerAttack(input);
                     }
+=======
+                BattleScreen(battle);
+
+            }
+            else if (input >= 1 && input <= battle.battleMonsters.Count)
+            {
+                if (battle.battleMonsters[input - 1].IsDead == true)
+                {
+                    Console.WriteLine("그 대상은 선택할 수 없습니다.");
+                    BattleScreen(battle);
+                }
+                else
+                {
+                    battle.PlayerAttack(input);
+
+                    Console.WriteLine();
+                    Console.WriteLine("0. 다음");
+                    Console.WriteLine();
+
+                    int next = cu.GetInput(0, 0);
+
+                    if (battle.isClear == 0)
+                    {
+                        battle.EnemyPhase();
+
+                        Console.WriteLine();
+                        Console.WriteLine("0. 다음");
+                        Console.WriteLine();
+
+                        if (battle.isClear == 0)
+                        {
+                            AttackScreen(battle);
+                        }
+                        else if (battle.isClear == 1)
+                        {
+                            BattleResultWin(battle);
+                        }
+                        else if (battle.isClear == 2)
+                        {
+                            BattleResultLose(battle);
+                        }
+
+                    }
+                    else if (battle.isClear == 1)
+                    {
+                        BattleResultWin(battle);
+                    }
+                    else if (battle.isClear == 2)
+                    {
+                        BattleResultLose(battle);
+                    }
+>>>>>>> Stashed changes
                 }
             }
-
 
         }
         public void BattleResultWin()
@@ -201,9 +260,9 @@ namespace TextRPG
             ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
             Console.WriteLine($" {player.character} ({player.jobClass})");
             Console.Write("HP ");
-            ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);      //player.maxhealth를 플레이어의 현재 체력 상황을 불러오는 식으로
             Console.Write(" -> ");
-            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"Dead", ConsoleColor.DarkRed);
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
