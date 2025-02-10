@@ -31,7 +31,7 @@ namespace TextRPG
 
             int cri = rand.Next(0, 100);
 
-            if(cri < 15)
+            if (cri < 15)
             {
                 return true;
             }
@@ -133,30 +133,31 @@ namespace TextRPG
                     battleMonsters[monsterNum - 1].IsDead = true;
                 }
 
-            if (battleMonsters[monsterNum - 1].IsDead)
-            {
-                ConsoleUtility.ColorWriteLine("Dead" , ConsoleColor.DarkGray);
-            }
-            else
-            {
-                ConsoleUtility.ColorWriteLine($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
-            }
-
-            //  현재 몇 마리의 몬스터가 죽었는지 계산
-            int deadCount = 0;
-
-            for (int i = 0; i < battleMonsters.Count; i++)
-            {
-                if (battleMonsters[i].IsDead == true)
+                if (battleMonsters[monsterNum - 1].IsDead)
                 {
-                    deadCount++;
+                    ConsoleUtility.ColorWriteLine("Dead", ConsoleColor.DarkGray);
                 }
-            }
+                else
+                {
+                    ConsoleUtility.ColorWriteLine($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
+                }
 
-            //  몬스터가 전부 죽었으면 던전 클리어
-            if (deadCount == battleMonsters.Count)
-            {
-                isClear = 1;
+                //  현재 몇 마리의 몬스터가 죽었는지 계산
+                int deadCount = 0;
+
+                for (int i = 0; i < battleMonsters.Count; i++)
+                {
+                    if (battleMonsters[i].IsDead == true)
+                    {
+                        deadCount++;
+                    }
+                }
+
+                //  몬스터가 전부 죽었으면 던전 클리어
+                if (deadCount == battleMonsters.Count)
+                {
+                    isClear = 1;
+                }
             }
         }
 
@@ -172,7 +173,7 @@ namespace TextRPG
                     float min = -1 * battleMonsters[i].Atk / 10.0f;
                     float max = battleMonsters[i].Atk / 10.0f;
 
-                    
+
                     int randomAttack = battleMonsters[i].Atk + (int)Math.Round(rand.NextDouble() * (max - min) + min);
 
                     bool isCritical = CriticalAttack();
@@ -210,23 +211,25 @@ namespace TextRPG
 
                         player.health -= randomAttack;
 
-                    if (player.health <= 0)
-                    {
-                        Console.WriteLine("Dead");
-                    }
-                    else
-                    {
-                        ConsoleUtility.ColorWriteLine($"{player.health} ", ConsoleColor.DarkRed);
-                    }
+                        if (player.health <= 0)
+                        {
+                            Console.WriteLine("Dead");
+                        }
+                        else
+                        {
+                            ConsoleUtility.ColorWriteLine($"{player.health} ", ConsoleColor.DarkRed);
+                        }
 
-                    Thread.Sleep(2000);
+                        Thread.Sleep(2000);
 
-                    if (player.health <= 0)
-                    {
-                        isClear = 2;
+                        if (player.health <= 0)
+                        {
+                            isClear = 2;
+                        }
                     }
                 }
             }
         }
     }
 }
+

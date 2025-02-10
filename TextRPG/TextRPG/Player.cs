@@ -9,7 +9,7 @@ namespace TextRPG
 {
     public class Player
     {
-        public string character { get; private set; }
+        public string character { get; set; }
         public string jobClass { get; private set; }
         public int level { get; private set; }
         public int attack { get; private set; }
