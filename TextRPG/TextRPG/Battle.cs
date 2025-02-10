@@ -5,6 +5,7 @@ namespace TextRPG
 {
     public class Battle
     {
+        public bool start { get; set; }
         public int isClear { get; set; }
         //  isClear == 0 이면 전투 진행중
         //             1 이면 성공
@@ -16,13 +17,12 @@ namespace TextRPG
         //  Battle 클래스 생성자
         public Battle(Player player, List<Monster> monsters)
         {
+            start = false;
             isClear = 0;
             this.player = player;
             this.monsters = monsters;
             battleMonsters = new List<Monster>();
         }
-
-
 
 
         //  전투 시작
@@ -56,7 +56,7 @@ namespace TextRPG
             float min = -1 * player.attack / 10.0f;
             float max = player.attack / 10.0f;
 
-            int randomAttack = (int)player.attack + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
+            int randomAttack = (int)player.attack + (int)Math.Round(rand.NextDouble() * (max - min) + min);
 
             Console.Clear();
             Console.WriteLine("Battle!!");
@@ -113,7 +113,7 @@ namespace TextRPG
                     float min = -1 * battleMonsters[i].Atk / 10.0f;
                     float max = battleMonsters[i].Atk / 10.0f;
 
-                    int randomAttack = battleMonsters[i].Atk + (int)Math.Ceiling(rand.NextDouble() * (max - min) + min);
+                    int randomAttack = battleMonsters[i].Atk + (int)Math.Round(rand.NextDouble() * (max - min) + min);
 
                     Console.Clear();
                     Console.WriteLine("Battle!!");

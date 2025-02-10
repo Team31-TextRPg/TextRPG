@@ -12,7 +12,7 @@ namespace TextRPG
             gm.MainScreen();
         }
     }
-    
+
 
     //  게임이 시작될 때 필요한 모든 것들을 생성하는 클래스
     public class GameManager
@@ -36,8 +36,6 @@ namespace TextRPG
                 new Monster(5,"대포미니언",25, 15)
             };
 
-            battle = new Battle(player, monsterList);
-
             itemList = new List<Item>
         {
             new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
@@ -45,7 +43,7 @@ namespace TextRPG
             new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true)
         };
         }
-        
+
 
         public void MainScreen()
         {
@@ -65,7 +63,8 @@ namespace TextRPG
                     StatusScreen();
                     break;
                 case 2:
-                    BattleScreen();
+                    battle = new Battle(player, monsterList);
+                    BattleScreen(battle);
                     break;
                 case 3:
                     PotionScreen();
@@ -80,11 +79,15 @@ namespace TextRPG
 
         }
 
-        public void BattleScreen()
+        public void BattleScreen(Battle battle)
         {
-
             Console.Clear();
-            battle.StartBattle();
+            if (battle.start == false)
+            {
+                battle.StartBattle();
+                battle.start = true;
+                Console.Write(battle.start);
+            }
             Console.WriteLine("Battle!!");
             Console.WriteLine();
             for (int i = 0; i < battle.battleMonsters.Count; i++)
@@ -122,22 +125,53 @@ namespace TextRPG
             int input = cu.GetBattleInput(0, battle.battleMonsters.Count);
             if (input == 0)
             {
-                BattleScreen();
+                BattleScreen(battle);
             }
             else if (input >= 1 && input <= battle.battleMonsters.Count)
             {
-                if (battle.battleMonsters.Count > 0)
+                battle.PlayerAttack(input);
+
+                Console.WriteLine();
+                Console.WriteLine("0. 다음");
+                Console.WriteLine();
+
+                int next = cu.GetInput(0, 0);
+
+                if (battle.isClear == 0)
                 {
-                    for (int i = 0; i < battle.battleMonsters.Count; i++)
+                    battle.EnemyPhase();
+
+                    Console.WriteLine();
+                    Console.WriteLine("0. 다음");
+                    Console.WriteLine();
+
+                    if (battle.isClear == 0)
                     {
-                        battle.PlayerAttack(input);
+                        AttackScreen(battle);
                     }
+                    else if (battle.isClear == 1)
+                    {
+                        BattleResultWin(battle);
+                    }
+                    else if (battle.isClear == 2)
+                    {
+                        BattleResultLose(battle);
+                    }
+
                 }
+                else if(battle.isClear == 1)
+                {
+                    BattleResultWin(battle);
+                }
+                else if(battle.isClear == 2)
+                {
+                    BattleResultLose(battle);
+                }  
             }
 
 
         }
-        public void BattleResultWin()
+        public void BattleResultWin(Battle battle)
         {
             Console.Clear();
             Console.WriteLine("Battle!! - Result");
@@ -156,7 +190,7 @@ namespace TextRPG
 
         }
 
-        public void BattleResultLose()
+        public void BattleResultLose(Battle battle)
         {
             Console.Clear();
             Console.WriteLine("Battle!! - Result");
@@ -181,7 +215,7 @@ namespace TextRPG
             Console.WriteLine("1. 사용하기");
             Console.WriteLine("0. 나가기");
             int input = cu.GetInput(0, 1);
-            switch(input)
+            switch (input)
             {
                 case 0:
                     MainScreen();
@@ -192,7 +226,7 @@ namespace TextRPG
             }
         }
 
-       
+
 
         public void PlayerInventoryScreen()
         {
@@ -213,7 +247,7 @@ namespace TextRPG
         }
 
 
-        
+
 
         // 아이템 사용 매서드 
         public int UsePotion(Item item)
@@ -223,11 +257,8 @@ namespace TextRPG
             Console.Write($"포션을 사용하면 체력을 30 회복 할 수 있습니다. ");
             Console.WriteLine();
 
-
-
             if (item.IsUsed && item.Type == Item.ItemType.HpPotion) // 선택된 item.IsUsed가 True 이고 아이템의 타입이 HpPotion 이면
             {
-                player.health = Math.Min(player.health + item.Value, player.maxHealth);
                 // *****플레이어의 HP가 상승 , 회복효과 설명, 아이템이 삭제
                 if (player.health < player.maxHealth)
                 {
@@ -235,7 +266,7 @@ namespace TextRPG
                     itemList.Remove(item); // 사용 후 아이템 삭제
                     Console.WriteLine($"(남은 포션 : {itemList.Count})");
                 }
-                else if(player.health == player.maxHealth)
+                else if (player.health == player.maxHealth)
                 {
                     Console.WriteLine($"(남은 포션 : {itemList.Count})");
                 }
@@ -246,14 +277,15 @@ namespace TextRPG
             }
             Console.WriteLine("1. 사용하기");
             Console.WriteLine("0. 나가기");
-            int input = cu.GetInput(0 , 1);
+            int input = cu.GetInput(0, 1);
             switch (input)
             {
-                case 0: 
+                case 0:
                     PotionScreen();
                     break;
                 case 1:
                     UsePotion(item);
+
                     break;
             }
             return player.health;
