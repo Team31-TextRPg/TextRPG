@@ -10,17 +10,15 @@ namespace TextRPG
         //  isClear == 0 이면 전투 진행중
         //             1 이면 성공
         //             2 면 실패
-        public int floor { get; set; }
         public Player player { get; set; }
         public List<Monster> monsters { get; set; }
         public List<Monster> battleMonsters { get; set; }
 
         //  Battle 클래스 생성자
-        public Battle(Player player, List<Monster> monstersint, int floor)
+        public Battle(Player player, List<Monster> monsters)
         {
             start = false;
             isClear = 0;
-            this.floor = floor;
             this.player = player;
             this.monsters = monsters;
             battleMonsters = new List<Monster>();
