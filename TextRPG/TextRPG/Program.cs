@@ -26,6 +26,8 @@ namespace TextRPG
 
         public GameManager()
         {
+            
+            
             player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 1500);
             cu = new ConsoleUtility();
 
@@ -51,6 +53,15 @@ namespace TextRPG
         {
             Console.Clear();
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+            Console.WriteLine("원하시는 이름을 입력해주세요:  ");
+            string playername = Console.ReadLine();
+            player.character = playername;
+            Console.WriteLine();
+            Console.WriteLine("원하시는 직업을 선택해주세요");
+            Console.WriteLine("1. 전사  /  2. 궁수  /  3. 도적");
+            string playerjob = Console.ReadLine();
+            player.jobClass = playerjob;
+            Console.Clear();
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
@@ -114,7 +125,7 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("[내정보]");
-            Console.WriteLine($"Lv.{player.level}  {player.character} ({player.jobClass})");
+            Console.WriteLine($"Lv.{player.level} {player.character} ({player.jobClass})");
             Console.WriteLine($"HP {player.health}/{player.maxHealth}");
             Console.WriteLine();
             Console.WriteLine("0. 취소");
