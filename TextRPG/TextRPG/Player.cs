@@ -32,7 +32,7 @@ namespace TextRPG
         public void ShowStatus()
         {
             Console.Clear();
-            Console.WriteLine("상태 보기");
+            ConsoleUtility.ColorWrite("상태 보기", ConsoleColor.Cyan);
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
             Console.WriteLine();
             Console.WriteLine($"Lv. {level.ToString("00")}");

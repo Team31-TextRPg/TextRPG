@@ -10,6 +10,7 @@ namespace TextRPG
         {
             GameManager gm = new GameManager();
             gm.MainScreen();
+           
         }
     }
     
@@ -85,7 +86,7 @@ namespace TextRPG
 
             Console.Clear();
             battle.StartBattle();
-            Console.WriteLine("Battle!!");
+            ConsoleUtility.ColorWrite("Battle!!", ConsoleColor.Cyan);
             Console.WriteLine();
             for (int i = 0; i < battle.battleMonsters.Count; i++)
             {
@@ -105,7 +106,7 @@ namespace TextRPG
         public void AttackScreen(Battle battle)
         {
             Console.Clear();
-            Console.WriteLine("Battle!!");
+            ConsoleUtility.ColorWrite("Battle!!", ConsoleColor.Cyan);
             Console.WriteLine();
             for (int i = 0; i < battle.battleMonsters.Count; i++)
             {
@@ -219,16 +220,14 @@ namespace TextRPG
         public int UsePotion(Item item)
         {
             Console.Clear();
-            Console.WriteLine("회복");
+            ConsoleUtility.ColorWrite("회복", ConsoleColor.Cyan);
             Console.Write($"포션을 사용하면 체력을 30 회복 할 수 있습니다. ");
             Console.WriteLine();
-
-
 
             if (item.IsUsed && item.Type == Item.ItemType.HpPotion) // 선택된 item.IsUsed가 True 이고 아이템의 타입이 HpPotion 이면
             {
                 player.health = Math.Min(player.health + item.Value, player.maxHealth);
-                // *****플레이어의 HP가 상승 , 회복효과 설명, 아이템이 삭제
+               
                 if (player.health < player.maxHealth)
                 {
                     UseHealthPotion(itemList[0]);
