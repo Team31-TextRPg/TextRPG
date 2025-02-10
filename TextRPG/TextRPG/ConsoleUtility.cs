@@ -54,6 +54,34 @@ namespace TextRPG
             }
 
         }
+
+        public static void ColorWriteLine(string str, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(str);
+            Console.ResetColor();
+        }
+        public static void ColorWrite(string str, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(str);
+            Console.ResetColor();
+        }
+        public static void Loading()
+        {
+            Console.Clear();
+            Console.Write("Loading");
+            string str = ".";
+
+            for (int i = 0; i < 10; i++)
+            {
+                Thread.Sleep(75);
+                Console.Write(str);
+            }
+        }
+
+
+
     }
 }
 
