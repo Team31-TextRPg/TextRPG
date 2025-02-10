@@ -9,11 +9,10 @@ namespace TextRPG
         static void Main(string[] args)
         {
             GameManager gm = new GameManager();
-            gm.MainScreen();
+            gm.IntroScreen();
 
         }
     }
-
 
     //  게임이 시작될 때 필요한 모든 것들을 생성하는 클래스
     public class GameManager
@@ -45,8 +44,7 @@ namespace TextRPG
             };
         }
 
-
-        public void MainScreen()
+        public void IntroScreen()
         {
             ConsoleUtility.Loading();
             Console.Clear();
@@ -68,7 +66,11 @@ namespace TextRPG
                     player.Theif();
                     break;
             }
+            MainScreen();
+        }
 
+        public void MainScreen()
+        {
             Console.Clear();
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
