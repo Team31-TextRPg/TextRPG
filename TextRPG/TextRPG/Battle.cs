@@ -5,6 +5,7 @@ namespace TextRPG
 {
     public class Battle
     {
+        public int floor { get; set; }
         public bool start { get; set; }
         public int isClear { get; set; }
         //  isClear == 0 이면 전투 진행중
@@ -15,12 +16,13 @@ namespace TextRPG
         public List<Monster> battleMonsters { get; set; }
 
         //  Battle 클래스 생성자
-        public Battle(Player player, List<Monster> monsters)
+        public Battle(Player player, List<Monster> monsters, int floor)
         {
             start = false;
             isClear = 0;
             this.player = player;
             this.monsters = monsters;
+            this.floor = floor;
             battleMonsters = new List<Monster>();
         }
 
@@ -65,11 +67,7 @@ namespace TextRPG
             //  랜덤한 몬스터가 1~3개 생성되는 로직
             Random rand = new Random();
 
-            List<Monster> randomMonsters = new List<Monster>();
-
-            randomMonsters = monsters.OrderBy(x => rand.Next()).ToList();
-
-            int monsterCount = rand.Next(1, 5);
+            int monsterCount = rand.Next(floor, floor+4);
 
             while (true)
             {
@@ -78,7 +76,7 @@ namespace TextRPG
                     break;
                 }
 
-                battleMonsters.Add((Monster)randomMonsters[rand.Next(0, randomMonsters.Count)].Clone());
+                battleMonsters.Add((Monster)monsters[rand.Next(floor-1, Math.Min(floor+2, monsters.Count))].Clone());
             }
         }
 
