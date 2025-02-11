@@ -300,7 +300,7 @@ namespace TextRPG
             int input = cu.GetBattleOverInput(0, 0);
         }
 
-        // public void PotionScreen()
+        // public void PotionScreen() // 포션만 사용 스크린 (작업중)
         // {
         //     ConsoleUtility.Loading();
         //     Console.Clear();
@@ -352,6 +352,7 @@ namespace TextRPG
                     {
                         UseHealthPotion(); //플레이어 스텟 변경
                         inventory.UseItem(selectedItemName);
+                        
                     }
                     else if (player.health == player.maxHealth)
                     {
@@ -364,36 +365,14 @@ namespace TextRPG
                 {
                     Console.WriteLine("사용할 수 없는 아이템 입니다.");
                 }
-			       
+			    
+                // 아이템 사용 후 새로고침
+                Console.WriteLine("아무 키나 누르세요...");
+                Console.ReadKey();
+                PlayerInventoryScreen(inventory, item);  // 인벤토리 화면 새로고침
+                
             }
-
-
-            // if (input == 0)
-            // {
-            //     Console.WriteLine("(아직안됨)이전 화면으로 돌아갑니다.");
-            //     PlayerInventoryScreen(inventory);
-            // }
-            // else
-            // {
-            //     // 선택한 아이템의 이름
-            //     string selectedItemName = available[input - 1];
-            //     Item selectedItem = ItemDatabase.GetItem(selectedItemName);
-            //
-            //     // 아이템 사용 처리
-            //     bool used = inventory.UseItem(selectedItemName);
-            //     if (used)
-            //     {
-            //         // 예를 들어 회복약(HpPotion)인 경우
-            //         if (selectedItem != null && selectedItem.Type == Item.ItemType.HpPotion)
-            //         {
-            //             UsePotion(selectedItem);
-            //         }
-            //         // 추가로 다른 타입에 따른 처리 가능
-            //     }
-            //
-            //     // 사용 후 다시 인벤토리 화면으로 돌아감
-            //     PlayerInventoryScreen(inventory);
-            // }
+            
         }
 
 

@@ -14,7 +14,7 @@ namespace TextRPG
         
             // 기본 아이템을 미리 추가
             AddItem("HealthPotion", 5);
-            AddItem("SlimeArmor", 0);
+            AddItem("SlimeArmor", 1);
         }
 
         // 아이템 추가: 이미 있으면 수량 증가, 없으면 새 항목 생성
