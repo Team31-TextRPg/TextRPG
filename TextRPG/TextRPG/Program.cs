@@ -230,7 +230,14 @@ namespace TextRPG
                         {
                             BattleResultLose(battle);
                         }
-
+                    }
+                    else if (battle.isClear == 1)
+                    {
+                        BattleResultWin(battle);
+                    }
+                    else if (battle.isClear == 2)
+                    {
+                        BattleResultLose(battle);
                     }
 
                 }
