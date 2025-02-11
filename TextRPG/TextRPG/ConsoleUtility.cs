@@ -80,7 +80,7 @@ namespace TextRPG
             }
         }
 
-        public int JobInput(int min, int max)
+        public int JobInput(int min, int max)    // 직업을 선택하는 함수
         {
             while (true)
             {

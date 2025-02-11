@@ -19,10 +19,13 @@ namespace TextRPG
     {
         Battle battle;
         Player player;
+        Quest quest;
+
         List<Monster> monsterList;
+        public List<Item> itemList;
+        public List<Quest> questList = new List<Quest>();    // 퀘스트 전체 정보
 
         ConsoleUtility cu;
-        public List<Item> itemList;
 
         public GameManager()
         {
@@ -41,6 +44,11 @@ namespace TextRPG
                 new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
                 new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true),
                 new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: true)
+            };
+
+            questList = new List<Quest>
+            {
+                new Quest("마을을 위협하는 미니언 처치", "미니언 5마리 처치 (0/5)", 5, "쓸만한 방패 x1", 5)
             };
         }
 
@@ -77,6 +85,7 @@ namespace TextRPG
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 전투 시작");
             Console.WriteLine("3. 회복 아이템");
+            Console.WriteLine("4. 퀘스트");
             Console.WriteLine();
 
             int input = cu.GetInput(1, 3);
@@ -92,8 +101,13 @@ namespace TextRPG
                 case 3:
                     PotionScreen();
                     break;
+                case 4:
+                    QuestScreen();
+                    break;
             }
         }
+
+
         public void StatusScreen()
         {
             player.ShowStatus();
@@ -375,6 +389,40 @@ namespace TextRPG
         {
             player.health = Math.Min(player.health + 30, player.maxHealth);
         }
+
+
+
+        public void QuestScreen()
+        {
+            Console.Clear();
+            Console.WriteLine("[퀘스트 목록]");
+            Console.WriteLine();
+
+            // quest들에 대한 출력
+            for (int i = 0; i < challenge.Count; i++)
+            {
+                Console.WriteLine(challenge[i].QuestDisplay());
+            }
+
+            Console.WriteLine("퀘스트를 선택하세요.");
+            Console.WriteLine(">>  ");
+            int input = cu.GetInput(1, 3);
+            switch (input)
+            {
+                case 1:
+                    MainScreen();
+                    break;
+                case 2:
+                    UsePotion(itemList[0]);
+                    break;
+                case 3:
+
+            }
+        }
+
+    }
+
+
 
     }
 }
