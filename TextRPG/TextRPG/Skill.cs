@@ -49,7 +49,7 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine($"{player.character}의 공격! - 알파 스트라이크!!");
             Console.WriteLine();
-            Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : {skillDamage}]");
+            Console.Write($"{battle.battleMonsters[input - 1].Name} 을(를) 맞췄습니다. [데미지 : {skillDamage}]");
             Console.WriteLine();
             Console.WriteLine($"LV.{battle.battleMonsters[input-1].Level} {battle.battleMonsters[input - 1].Name}");
             Console.Write($"HP {battle.battleMonsters[input - 1].Hp} -> ");
@@ -133,7 +133,7 @@ namespace TextRPG
                 Console.WriteLine();
                 Console.WriteLine($"{player.character}의 공격! - 더블 스트라이크!!");
                 Console.WriteLine();
-                Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : {skillDamage}]");
+                Console.Write($"{battle.battleMonsters[randomIndex].Name} 을(를) 맞췄습니다. [데미지 : {skillDamage}]");
                 Console.WriteLine();
                 Console.WriteLine($"LV.{battle.battleMonsters[randomIndex].Level} {battle.battleMonsters[randomIndex].Name}");
                 Console.Write($"HP {battle.battleMonsters[randomIndex].Hp} -> ");
