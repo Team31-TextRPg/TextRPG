@@ -6,7 +6,7 @@ public class Item
     {
         Weapon,
         Armor,
-        HpPotion
+        HpPotion,
     }
     
     public string Name {get;}
@@ -43,6 +43,7 @@ public class Item
     }
     
 }
+
 
 
 
