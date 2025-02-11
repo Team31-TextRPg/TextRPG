@@ -16,7 +16,10 @@ namespace TextRPG
         public int defense { get; private set; }
         public int health { get; set; }
         public int maxHealth { get; private set; }
+        public int mp { get; set; }
+        public int maxMp { get; set; }
         public int gold { get; private set; }
+        public List<ISkill> skillList { get; set; }
 
         public Player(string name, string job, int level, int attackPower, int defensePower, int health, int maxhealth, int gold) // 플레이어 생성자
         {
@@ -27,7 +30,14 @@ namespace TextRPG
             defense = defensePower;
             this.health = health;
             maxHealth = maxhealth;
+            maxMp = 50;
+            mp = maxMp;
             this.gold = gold;
+            skillList = new List<ISkill>
+            {
+                new AlphaStrike(),
+                new DoubleStrike()
+            };
         }
         public void ShowStatus()
         {
@@ -50,6 +60,10 @@ namespace TextRPG
             ConsoleUtility.ColorWrite($"{health}", ConsoleColor.Red);
             Console.Write(" / ");
             ConsoleUtility.ColorWriteLine($"{maxHealth}", ConsoleColor.Red);
+            Console.Write("MP : ");
+            ConsoleUtility.ColorWrite($"{mp}", ConsoleColor.Red);
+            Console.Write(" / ");
+            ConsoleUtility.ColorWriteLine($"{maxMp}", ConsoleColor.Red);
             //Console.WriteLine($"Gold : {gold} G");
             Console.Write("Gold : ");
             ConsoleUtility.ColorWrite($"{gold} " , ConsoleColor.Red);

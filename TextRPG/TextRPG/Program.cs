@@ -145,8 +145,9 @@ namespace TextRPG
             ConsoleUtility.ColorWriteLine($"{player.maxHealth} ", ConsoleColor.DarkRed);
             Console.WriteLine();
             Console.WriteLine("1. 공격");
+            Console.WriteLine("2. 스킬");
             Console.WriteLine("0. 도망치기");
-            int input = cu.GetInput(0, 1);
+            int input = cu.GetInput(0, 2);
             switch (input)
             {
                 case 0:
@@ -154,6 +155,9 @@ namespace TextRPG
                     break;
                 case 1:
                     AttackScreen(battle);
+                    break;
+                case 2:
+                    SkillScreen(battle);
                     break;
             }
 
@@ -224,7 +228,7 @@ namespace TextRPG
 
                         if (battle.isClear == 0)
                         {
-                            AttackScreen(battle);
+                            BattleScreen(battle);
                         }
                         else if (battle.isClear == 1)
                         {
@@ -248,6 +252,207 @@ namespace TextRPG
             }
 
         }
+
+        public void SkillScreen(Battle battle)
+        {
+            Console.Clear();
+            ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
+            Console.WriteLine();
+
+            for (int i = 0; i < battle.battleMonsters.Count; i++)
+            {
+                ConsoleUtility.ColorWrite($"{i + 1} ", ConsoleColor.Blue);
+                if (battle.battleMonsters[i].IsDead == true)
+                {
+                    ConsoleUtility.ColorWriteLine(battle.battleMonsters[i].MonsterDisplay(), ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("[내정보]");
+            Console.Write("Lv.");
+            ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
+            Console.WriteLine($" {player.character} ({player.jobClass})");
+            Console.Write("HP ");
+            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+            Console.Write("/");
+            ConsoleUtility.ColorWriteLine($"{player.maxHealth} ", ConsoleColor.DarkRed);
+            Console.Write("MP ");
+            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
+            Console.Write("/");
+            ConsoleUtility.ColorWriteLine($"{player.maxMp} ", ConsoleColor.DarkRed);
+            Console.WriteLine();
+
+            for (int i = 0; i < player.skillList.Count; i++)
+            {
+                Console.Write($"{i + 1}. ");
+                player.skillList[i].SkillInfo();
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("0. 취소");
+            Console.WriteLine();
+            int input = cu.GetInput(0, player.skillList.Count);
+            if (input == 0)
+            {
+                BattleScreen(battle);
+            }
+            else if (input >= 1 && input <= player.skillList.Count)
+            {
+                if (player.mp < player.skillList[input - 1].mpValue)
+                {
+                    Console.WriteLine("Mp가 부족합니다.");
+                    Thread.Sleep(1000);
+                    SkillScreen(battle);
+                }
+                else
+                {
+                    if (player.skillList[input - 1].isRandom)
+                    {
+                        SkillAttackRandom(battle, input);
+                    }
+                    else
+                    {
+                        SkillAttackSelect(battle, input);
+                    }
+                }
+            }
+
+        }
+
+        public void SkillAttackRandom(Battle battle, int skillIndex)
+        {
+            player.skillList[skillIndex - 1].Use(player, battle, 0);
+            Console.WriteLine();
+            Console.WriteLine("0. 다음");
+            Console.WriteLine();
+            cu.GetInput(0, 0);
+
+            if (battle.isClear == 0)
+            {
+                battle.EnemyPhase();
+
+                Console.WriteLine();
+                Console.WriteLine("0. 다음");
+                Console.WriteLine();
+
+                if (battle.isClear == 0)
+                {
+                    BattleScreen(battle);
+                }
+                else if (battle.isClear == 1)
+                {
+                    BattleResultWin(battle);
+                }
+                else if (battle.isClear == 2)
+                {
+                    BattleResultLose(battle);
+                }
+            }
+            else if (battle.isClear == 1)
+            {
+                BattleResultWin(battle);
+            }
+            else if (battle.isClear == 2)
+            {
+                BattleResultLose(battle);
+            }
+        }
+
+        public void SkillAttackSelect(Battle battle, int skillIndex)
+        {
+            Console.Clear();
+            ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
+            Console.WriteLine();
+
+            for (int i = 0; i < battle.battleMonsters.Count; i++)
+            {
+                ConsoleUtility.ColorWrite($"{i + 1} ", ConsoleColor.Blue);
+                if (battle.battleMonsters[i].IsDead == true)
+                {
+                    ConsoleUtility.ColorWriteLine(battle.battleMonsters[i].MonsterDisplay(), ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    Console.WriteLine(battle.battleMonsters[i].MonsterDisplay());
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("[내정보]");
+            Console.Write("Lv.");
+            ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
+            Console.WriteLine($" {player.character} ({player.jobClass})");
+            Console.Write("HP ");
+            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+            Console.Write("/");
+            ConsoleUtility.ColorWriteLine($"{player.maxHealth} ", ConsoleColor.DarkRed);
+            Console.WriteLine();
+            Console.WriteLine("0. 취소");
+            Console.WriteLine();
+            int input = cu.GetBattleInput(0, battle.battleMonsters.Count);
+            if (input == 0)
+            {
+                BattleScreen(battle);
+            }
+            else if (input >= 1 && input <= battle.battleMonsters.Count)
+            {
+                if (battle.battleMonsters[input - 1].IsDead == true)
+                {
+                    Console.WriteLine("그 대상은 선택할 수 없습니다.");
+                    Thread.Sleep(1000);
+                    AttackScreen(battle);
+                }
+                else
+                {
+                    player.skillList[skillIndex - 1].Use(player, battle, input);
+
+                    Console.WriteLine();
+                    Console.WriteLine("0. 다음");
+                    Console.WriteLine();
+
+                    int next = cu.GetInput(0, 0);
+
+                    if (battle.isClear == 0)
+                    {
+                        battle.EnemyPhase();
+
+                        Console.WriteLine();
+                        Console.WriteLine("0. 다음");
+                        Console.WriteLine();
+
+                        if (battle.isClear == 0)
+                        {
+                            BattleScreen(battle);
+                        }
+                        else if (battle.isClear == 1)
+                        {
+                            BattleResultWin(battle);
+                        }
+                        else if (battle.isClear == 2)
+                        {
+                            BattleResultLose(battle);
+                        }
+                    }
+                    else if (battle.isClear == 1)
+                    {
+                        BattleResultWin(battle);
+                    }
+                    else if (battle.isClear == 2)
+                    {
+                        BattleResultLose(battle);
+                    }
+
+                }
+            }
+        }
+
         public void BattleResultWin(Battle battle)
         {
             ConsoleUtility.Loading();
@@ -263,7 +468,15 @@ namespace TextRPG
             Console.Write("HP ");
             ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
-            ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWriteLine($"{player.health}", ConsoleColor.DarkRed);
+            Console.WriteLine();
+
+            Console.WriteLine("<MP 10 회복>");
+            Console.Write("MP ");
+            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
+            Console.Write(" -> ");
+            player.mp += 10;
+            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
 
             floor++;
 
