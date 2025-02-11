@@ -84,7 +84,7 @@ namespace TextRPG
                 return;
             }
 
-            Console.WriteLine("[플레이어 인벤토리]");
+            Console.WriteLine("[보유한 아이템 목록]");
             int index = 1;
             foreach (var itemName in available)
             {

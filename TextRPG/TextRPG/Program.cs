@@ -326,7 +326,7 @@ namespace TextRPG
         public void PlayerInventoryScreen(Inventory inventory, Item item)
         {
             Console.Clear();
-            Console.WriteLine("[나의 인벤토리]");
+            ConsoleUtility.ColorWriteLine("인벤토리", ConsoleColor.Cyan);
             Console.WriteLine();
             inventory.DisplayInventory();
             
@@ -356,7 +356,7 @@ namespace TextRPG
                     }
                     else if (player.health == player.maxHealth)
                     {
-                        Console.WriteLine($"체력이 가득찬 상태에서 사용할 수 없습니다.");
+                        Console.WriteLine("체력이 가득찬 상태에서 사용할 수 없습니다.");
                     }
 					          
                 }
@@ -369,7 +369,7 @@ namespace TextRPG
                 // 아이템 사용 후 새로고침
                 Console.WriteLine("아무 키나 누르세요...");
                 Console.ReadKey();
-                PlayerInventoryScreen(inventory, item);  // 인벤토리 화면 새로고침
+                PlayerInventoryScreen(inventory, item); 
                 
             }
             
