@@ -212,7 +212,11 @@ namespace TextRPG
                         }
 
                     }
+<<<<<<< Updated upstream
                     else if (battle.isClear == 1)
+=======
+                    else if(battle.isClear == 1)
+>>>>>>> Stashed changes
                     {
                         BattleResultWin(battle);
                     }
@@ -220,6 +224,10 @@ namespace TextRPG
                     {
                         BattleResultLose(battle);
                     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+
 >>>>>>> Stashed changes
                 }
             }
