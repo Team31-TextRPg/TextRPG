@@ -22,17 +22,12 @@ namespace TextRPG
         //퀘스트 생성자
         public Quest(string name, string description, int requiredKills, string rewardItem, int rewardGold)
         {
-            Name = name;
-            Description = description;
-            RequiredKills = requiredKills;
-            RewardItem = rewardItem;
-            RewardGold = rewardGold;
-            CurrentKills = 0;
-        }
-        //퀘스트 내용
-        public void ProgressQuest()
-        {
-
+            Name = name; //퀘스트 이름
+            Description = description;  //퀘스트 서술
+            RequiredKills = requiredKills; //필수 사용
+            RewardItem = rewardItem;//보상 ㅏ이템
+            RewardGold = rewardGold;//보상 골드
+            CurrentKills = 0; //현재 킬수 - 미니언 처치 퀘스트 사용
         }
 
         //showQuestMenu 메서드 아직 수락하지 않은 퀘스트 목록을 보여줌.
@@ -62,5 +57,15 @@ namespace TextRPG
         {
 
         }
+
+        //퀘스트 내용/진행 상황 메서드
+        public void ProgressQuest()
+        {
+            //퀘스트의 종류에 따라 구분.
+        }
+
+        //미니언 처치 퀘스트 일 경우
+
+        //장비 착용 퀘스트 일 경우
     }
 }
