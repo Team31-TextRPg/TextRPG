@@ -67,7 +67,7 @@ namespace TextRPG
             //  랜덤한 몬스터가 1~3개 생성되는 로직
             Random rand = new Random();
 
-            int monsterCount = rand.Next(floor, floor+4);
+            int monsterCount = rand.Next(floor, floor + 4);
 
             while (true)
             {
@@ -76,7 +76,7 @@ namespace TextRPG
                     break;
                 }
 
-                battleMonsters.Add((Monster)monsters[rand.Next(floor-1, Math.Min(floor+2, monsters.Count))].Clone());
+                battleMonsters.Add((Monster)monsters[rand.Next(floor - 1, Math.Min(floor + 2, monsters.Count))].Clone());
             }
         }
 
@@ -85,10 +85,10 @@ namespace TextRPG
         {
             Random rand = new Random();
 
-            float min = -1 * player.attack / 10.0f;
-            float max = player.attack / 10.0f;
+            int attackMin = (int)player.attack - (int)Math.Ceiling(player.attack / 10.0f);
+            int attackMax = (int)player.attack + (int)Math.Ceiling(player.attack / 10.0f);
 
-            int randomAttack = (int)player.attack + (int)Math.Round(rand.NextDouble() * (max - min) + min);
+            int randomAttack = rand.Next(attackMin, attackMax + 1);
 
             bool isCritical = CriticalAttack();
             if (isCritical)
@@ -168,11 +168,10 @@ namespace TextRPG
                 {
                     Random rand = new Random();
 
-                    float min = -1 * battleMonsters[i].Atk / 10.0f;
-                    float max = battleMonsters[i].Atk / 10.0f;
+                    int attackMin = (int)battleMonsters[i].Atk - (int)Math.Ceiling(battleMonsters[i].Atk / 10.0f);
+                    int attackMax = (int)battleMonsters[i].Atk + (int)Math.Ceiling(battleMonsters[i].Atk / 10.0f);
 
-
-                    int randomAttack = battleMonsters[i].Atk + (int)Math.Round(rand.NextDouble() * (max - min) + min);
+                    int randomAttack = rand.Next(attackMin, attackMax + 1);
 
                     bool isCritical = CriticalAttack();
                     if (isCritical)
