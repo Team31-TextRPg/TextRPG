@@ -11,14 +11,16 @@ namespace TextRPG
     {
         public string character { get; set; }
         public string jobClass { get; private set; }
-        public int level { get; private set; }
-        public int attack { get; private set; }
-        public int defense { get; private set; }
+        public int level { get; set; }
+        public int exp { get; set; }
+        public int maxExp { get; set; }
+        public float attack { get; set; }
+        public int defense { get; set; }
         public int health { get; set; }
         public int maxHealth { get; private set; }
         public int mp { get; set; }
         public int maxMp { get; set; }
-        public int gold { get; private set; }
+        public int gold { get; set; }
         public List<ISkill> skillList { get; set; }
 
         public Player(string name, string job, int level, int attackPower, int defensePower, int health, int maxhealth, int gold) // 플레이어 생성자
@@ -26,6 +28,8 @@ namespace TextRPG
             character = name;
             jobClass = job;
             this.level = level;
+            exp = 0;
+            maxExp = 10;
             attack = attackPower;
             defense = defensePower;
             this.health = health;
@@ -49,6 +53,10 @@ namespace TextRPG
             Console.Write("Lv. ");
             ConsoleUtility.ColorWriteLine($"{level.ToString("00")}", ConsoleColor.Red);
             Console.WriteLine($"{character} ( {jobClass} )");
+            Console.Write("Exp : ");
+            ConsoleUtility.ColorWrite($"{exp}", ConsoleColor.Red);
+            Console.Write(" / ");
+            ConsoleUtility.ColorWriteLine($"{maxExp}", ConsoleColor.Red);
             //Console.WriteLine($"공격력 : {attack}");
             Console.Write("공격력 : ");
             ConsoleUtility.ColorWriteLine($"{attack}", ConsoleColor.Red);
@@ -66,7 +74,7 @@ namespace TextRPG
             ConsoleUtility.ColorWriteLine($"{maxMp}", ConsoleColor.Red);
             //Console.WriteLine($"Gold : {gold} G");
             Console.Write("Gold : ");
-            ConsoleUtility.ColorWrite($"{gold} " , ConsoleColor.Red);
+            ConsoleUtility.ColorWrite($"{gold} ", ConsoleColor.Red);
             Console.WriteLine("G");
             Console.WriteLine("1");
             Console.WriteLine("0. 나가기");

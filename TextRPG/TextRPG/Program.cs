@@ -466,27 +466,114 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine($"던전에서 몬스터 {battle.battleMonsters.Count}마리를 잡았습니다.");
             Console.WriteLine();
+            Console.WriteLine("[캐릭터 정보]");
+            Console.Write("Lv.");
+            ConsoleUtility.ColorWrite($"{player.level}", ConsoleColor.DarkRed);
+            Console.Write(" -> ");
+
+            int curExp = player.exp;
+            int sumMonsterLevel = 0;
+
+            for (int i = 0; i < battle.battleMonsters.Count; i++)
+            {
+                sumMonsterLevel += battle.battleMonsters[i].Level;
+            }
+
+            player.exp += sumMonsterLevel;
+            switch (player.level)
+            {
+                case 1:
+                    if(player.exp >= player.maxExp)
+                    {
+                        player.level++;
+                        player.exp = player.exp - player.maxExp;
+                        player.maxExp = 35;
+
+                        player.attack += 0.5f;
+                        player.defense += 1;
+                    }
+                    break;
+                case 2:
+                    if (player.exp >= player.maxExp)
+                    {
+                        player.level++;
+                        player.exp = player.exp - player.maxExp;
+                        player.maxExp = 65;
+
+                        player.attack += 0.5f;
+                        player.defense += 1;
+                    }
+                    break;
+                case 3:
+                    if (player.exp >= player.maxExp)
+                    {
+                        player.level++;
+                        player.exp = player.exp - player.maxExp;
+                        player.maxExp = 100;
+
+                        player.attack += 0.5f;
+                        player.defense += 1;
+                    }
+                    break;
+                case 4:
+                    if (player.exp >= player.maxExp)
+                    {
+                        player.level++;
+                        player.exp = player.exp - player.maxExp;
+                        player.maxExp = 9999;
+
+                        player.attack += 0.5f;
+                        player.defense += 1;
+                    }
+                    break;
+                case 5:
+                    if (player.exp >= player.maxExp)
+                    {
+                        player.level++;
+                        player.exp = player.exp - player.maxExp;
+                        player.maxExp = 9999;
+
+                        player.attack += 0.5f;
+                        player.defense += 1;
+                    }
+                    break;
+            }
+
+            Console.Write("Lv.");
             ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
             Console.WriteLine($" {player.character} ({player.jobClass})");
             Console.Write("HP ");
             ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
             ConsoleUtility.ColorWriteLine($"{player.health}", ConsoleColor.DarkRed);
-            Console.WriteLine();
-
-            Console.WriteLine("<MP 10 회복>");
             Console.Write("MP ");
             ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
             player.mp += 10;
-            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
+            if(player.mp > player.maxMp)
+            {
+                player.mp = player.maxMp;
+            }
+            ConsoleUtility.ColorWriteLine($"{player.mp}", ConsoleColor.DarkRed);
+            Console.Write("Exp ");
+            ConsoleUtility.ColorWrite($"{curExp}", ConsoleColor.DarkRed);
+            Console.Write(" -> ");
+            ConsoleUtility.ColorWriteLine($"{player.exp}", ConsoleColor.DarkRed);
+            Console.WriteLine();
 
             floor++;
+
+            Console.WriteLine("[획득 아이템]");
+            int rewardGold = sumMonsterLevel * 70;
+            Console.WriteLine($"{rewardGold} Gold");
+            player.gold += rewardGold;
+            // + 여러 장비나 포션들
+
 
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
-            Console.WriteLine(">>");
+            Console.Write(">>");
             int input = cu.GetBattleOverInput(0, 0);
 
             MainScreen();
