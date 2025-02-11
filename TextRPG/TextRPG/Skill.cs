@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextRPG
 {
+    //  스킬 기본 구성 인터페이스
     public interface ISkill
     {
         public string name { get; }
@@ -13,9 +14,15 @@ namespace TextRPG
         public float damageValue { get; set; }
         public string description { get; set; }
         public bool isRandom { get; set; }
+
+        //  스킬의 정보를 보여주는 함수
         public void SkillInfo();
+
+        //  스킬 사용 함수
         public void Use(Player player, Battle battle, int input);
     }
+
+    //  알파 스트라이크 스킬 클래스
     public class AlphaStrike : ISkill
     {
         public string name { get; set; }
@@ -23,6 +30,7 @@ namespace TextRPG
         public float damageValue { get; set; }
         public string description { get; set; }
         public bool isRandom { get; set; }
+
         public AlphaStrike()
         {
             name = "알파 스트라이크";
@@ -87,6 +95,7 @@ namespace TextRPG
         }
     }
 
+    //  더블 스크라이크 스킬 클래스
     public class DoubleStrike : ISkill
     {
         public string name { get; set; }
@@ -117,14 +126,30 @@ namespace TextRPG
             Random rand = new Random();
 
             int randomIndex = 0;
+            int overlap = -999;
 
             for (int i = 0; i < 2; i++)
             {
+                int leaveCount = 0;
+
+                for(int j = 0; j < battle.battleMonsters.Count; j++)
+                {
+                    if (battle.battleMonsters[j].IsDead == false)
+                    {
+                        leaveCount++;
+                    }
+                }
+
                 do
                 {
                     randomIndex = rand.Next(0, battle.battleMonsters.Count);
                 }
-                while (battle.battleMonsters[randomIndex].IsDead == true);
+                while (battle.battleMonsters[randomIndex].IsDead == true || randomIndex == overlap);
+
+                if (i == 0)
+                {
+                    overlap = randomIndex;
+                }
 
                 int skillDamage = (int)Math.Ceiling(player.attack * 1.5f);
 
@@ -171,7 +196,14 @@ namespace TextRPG
                     battle.isClear = 1;
                     break;
                 }
+
+                if (leaveCount == 1)
+                {
+                    break;
+                }
             }
+
+
         }
     }
 }

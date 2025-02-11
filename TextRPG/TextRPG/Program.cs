@@ -253,6 +253,7 @@ namespace TextRPG
 
         }
 
+        //  무슨 스킬을 사용할 지 고르는 화면
         public void SkillScreen(Battle battle)
         {
             Console.Clear();
@@ -325,9 +326,10 @@ namespace TextRPG
 
         }
 
+        //  랜덤한 적을 공격하는 스킬을 사용했을 때 나오는 화면
         public void SkillAttackRandom(Battle battle, int skillIndex)
         {
-            player.skillList[skillIndex - 1].Use(player, battle, 0);
+            player.skillList[skillIndex - 1].Use(player, battle, -999);
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
@@ -364,6 +366,7 @@ namespace TextRPG
             }
         }
 
+        //  적을 지정해서 공격하는 스킬을 사용했을 때 나오는 화면
         public void SkillAttackSelect(Battle battle, int skillIndex)
         {
             Console.Clear();
