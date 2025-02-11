@@ -19,6 +19,7 @@ namespace TextRPG
     {
         Battle battle;
         Player player;
+        int floor;
         List<Monster> monsterList;
 
         ConsoleUtility cu;
@@ -28,12 +29,15 @@ namespace TextRPG
         {
             player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 1500);
             cu = new ConsoleUtility();
+            floor = 1;
 
             monsterList = new List<Monster>
             {
-                new Monster(2,"미니언",15, 10),
-                new Monster(3,"공허충", 10, 15),
-                new Monster(5,"대포미니언",25, 15)
+                new Monster(1,"미니언",15, 3),
+                new Monster(2,"공허충", 10, 5),
+                new Monster(3,"대포미니언",25, 4),
+                new Monster(4,"칼날부리",30,5),
+                new Monster(5,"늑대",20,7)
             };
 
             itemList = new List<Item>
@@ -75,7 +79,7 @@ namespace TextRPG
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 전투 시작");
+            Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
             Console.WriteLine("3. 회복 아이템");
             Console.WriteLine();
 
@@ -86,7 +90,7 @@ namespace TextRPG
                     StatusScreen();
                     break;
                 case 2:
-                    battle = new Battle(player, monsterList);
+                    battle = new Battle(player, monsterList, floor);
                     BattleScreen(battle);
                     break;
                 case 3:
@@ -230,7 +234,14 @@ namespace TextRPG
                         {
                             BattleResultLose(battle);
                         }
-
+                    }
+                    else if (battle.isClear == 1)
+                    {
+                        BattleResultWin(battle);
+                    }
+                    else if (battle.isClear == 2)
+                    {
+                        BattleResultLose(battle);
                     }
 
                 }
@@ -253,12 +264,16 @@ namespace TextRPG
             ConsoleUtility.ColorWrite($"{player.maxHealth}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
             ConsoleUtility.ColorWrite($"{player.health}", ConsoleColor.DarkRed);
+
+            floor++;
+
             Console.WriteLine();
             Console.WriteLine("0. 다음");
             Console.WriteLine();
             Console.WriteLine(">>");
             int input = cu.GetBattleOverInput(0, 0);
 
+            MainScreen();
         }
 
         public void BattleResultLose(Battle battle)

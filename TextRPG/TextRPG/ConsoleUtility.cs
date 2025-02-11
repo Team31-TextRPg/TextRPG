@@ -80,7 +80,22 @@ namespace TextRPG
             }
         }
 
-
+        public int JobInput(int min, int max)
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("원하시는 직업을 입력해주세요.");
+                Console.WriteLine("1. 전사(체력+)  /  2. 궁수(공격력+)  /  3. 도적(방어력+) ");
+                Console.Write(">> ");
+                if (int.TryParse(Console.ReadLine(), out int number) && number >= min && number <= max)
+                {
+                    return number;
+                }
+                Console.WriteLine();
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+        }
 
     }
 }

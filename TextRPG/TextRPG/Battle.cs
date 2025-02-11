@@ -5,6 +5,7 @@ namespace TextRPG
 {
     public class Battle
     {
+        public int floor { get; set; }
         public bool start { get; set; }
         public int isClear { get; set; }
         //  isClear == 0 이면 전투 진행중
@@ -15,13 +16,48 @@ namespace TextRPG
         public List<Monster> battleMonsters { get; set; }
 
         //  Battle 클래스 생성자
-        public Battle(Player player, List<Monster> monsters)
+        public Battle(Player player, List<Monster> monsters, int floor)
         {
             start = false;
             isClear = 0;
             this.player = player;
             this.monsters = monsters;
+            this.floor = floor;
             battleMonsters = new List<Monster>();
+        }
+
+        //  전투 시 15% 확률로 크리티컬 데미지를 입힌다.
+        public bool CriticalAttack()
+        {
+            Random rand = new Random();
+
+            int cri = rand.Next(0, 100);
+
+            if (cri < 15)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //  전투 시 10% 확률로 미스(회피) 판정
+        public bool MissAttack()
+        {
+            Random rand = new Random();
+
+            int cri = rand.Next(0, 100);
+
+            if (cri < 10)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
@@ -31,11 +67,7 @@ namespace TextRPG
             //  랜덤한 몬스터가 1~3개 생성되는 로직
             Random rand = new Random();
 
-            List<Monster> randomMonsters = new List<Monster>();
-
-            randomMonsters = monsters.OrderBy(x => rand.Next()).ToList();
-
-            int monsterCount = rand.Next(1, 4);
+            int monsterCount = rand.Next(floor, floor + 4);
 
             while (true)
             {
@@ -44,7 +76,7 @@ namespace TextRPG
                     break;
                 }
 
-                battleMonsters.Add(randomMonsters[rand.Next(0, randomMonsters.Count)]);
+                battleMonsters.Add((Monster)monsters[rand.Next(floor - 1, Math.Min(floor + 2, monsters.Count))].Clone());
             }
         }
 
@@ -53,59 +85,77 @@ namespace TextRPG
         {
             Random rand = new Random();
 
-            float min = -1 * player.attack / 10.0f;
-            float max = player.attack / 10.0f;
+            int attackMin = (int)player.attack - (int)Math.Ceiling(player.attack / 10.0f);
+            int attackMax = (int)player.attack + (int)Math.Ceiling(player.attack / 10.0f);
 
-            int randomAttack = (int)player.attack + (int)Math.Round(rand.NextDouble() * (max - min) + min);
+            int randomAttack = rand.Next(attackMin, attackMax + 1);
+
+            bool isCritical = CriticalAttack();
+            if (isCritical)
+            {
+                randomAttack *= 16;
+                randomAttack /= 10;
+            }
 
             Console.Clear();
             ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
             Console.WriteLine();
             Console.WriteLine($"{player.character} 의 공격!");
-            Console.Write("Lv.");
-            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Level} ", ConsoleColor.DarkRed);
-            Console.Write($"{ battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : ");
-            ConsoleUtility.ColorWrite( $"{randomAttack}", ConsoleColor.DarkRed);
-            Console.WriteLine("]");
-            Console.WriteLine();
-            Console.Write("Lv.");
-            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Level} ", ConsoleColor.DarkRed);
-            Console.WriteLine($"{battleMonsters[monsterNum - 1].Name}");
-            Console.Write("HP ");
-            ConsoleUtility.ColorWrite($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
-            Console.Write("-> ");
 
-            battleMonsters[monsterNum - 1].Hp -= randomAttack;
-
-            if (battleMonsters[monsterNum - 1].Hp <= 0)
+            if (MissAttack())
             {
-                battleMonsters[monsterNum - 1].IsDead = true;
-            }
-
-            if (battleMonsters[monsterNum - 1].IsDead)
-            {
-                ConsoleUtility.ColorWriteLine("Dead" , ConsoleColor.DarkGray);
+                Console.Write($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name} 을(를) 공격했지만 아무일도 일어나지 않았습니다.");
             }
             else
             {
-                ConsoleUtility.ColorWriteLine($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
-            }
+                Console.Write($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
 
-            //  현재 몇 마리의 몬스터가 죽었는지 계산
-            int deadCount = 0;
-
-            for (int i = 0; i < battleMonsters.Count; i++)
-            {
-                if (battleMonsters[i].IsDead == true)
+                if (isCritical)
                 {
-                    deadCount++;
+                    Console.WriteLine(" - 치명타 공격!!");
                 }
-            }
+                else
+                {
+                    Console.WriteLine();
+                }
 
-            //  몬스터가 전부 죽었으면 던전 클리어
-            if (deadCount == battleMonsters.Count)
-            {
-                isClear = 1;
+
+                Console.WriteLine();
+                Console.WriteLine($"LV.{battleMonsters[monsterNum - 1].Level} {battleMonsters[monsterNum - 1].Name}");
+                Console.Write($"HP {battleMonsters[monsterNum - 1].Hp} -> ");
+
+                battleMonsters[monsterNum - 1].Hp -= randomAttack;
+
+                if (battleMonsters[monsterNum - 1].Hp <= 0)
+                {
+                    battleMonsters[monsterNum - 1].IsDead = true;
+                }
+
+                if (battleMonsters[monsterNum - 1].IsDead)
+                {
+                    ConsoleUtility.ColorWriteLine("Dead", ConsoleColor.DarkGray);
+                }
+                else
+                {
+                    ConsoleUtility.ColorWriteLine($"{battleMonsters[monsterNum - 1].Hp} ", ConsoleColor.DarkRed);
+                }
+
+                //  현재 몇 마리의 몬스터가 죽었는지 계산
+                int deadCount = 0;
+
+                for (int i = 0; i < battleMonsters.Count; i++)
+                {
+                    if (battleMonsters[i].IsDead == true)
+                    {
+                        deadCount++;
+                    }
+                }
+
+                //  몬스터가 전부 죽었으면 던전 클리어
+                if (deadCount == battleMonsters.Count)
+                {
+                    isClear = 1;
+                }
             }
         }
 
@@ -118,47 +168,65 @@ namespace TextRPG
                 {
                     Random rand = new Random();
 
-                    float min = -1 * battleMonsters[i].Atk / 10.0f;
-                    float max = battleMonsters[i].Atk / 10.0f;
+                    int attackMin = (int)battleMonsters[i].Atk - (int)Math.Ceiling(battleMonsters[i].Atk / 10.0f);
+                    int attackMax = (int)battleMonsters[i].Atk + (int)Math.Ceiling(battleMonsters[i].Atk / 10.0f);
 
-                    int randomAttack = battleMonsters[i].Atk + (int)Math.Round(rand.NextDouble() * (max - min) + min);
+                    int randomAttack = rand.Next(attackMin, attackMax + 1);
+
+                    bool isCritical = CriticalAttack();
+                    if (isCritical)
+                    {
+                        randomAttack *= 16;
+                        randomAttack /= 10;
+                    }
 
                     Console.Clear();
                     ConsoleUtility.ColorWriteLine("Battle!!", ConsoleColor.Cyan);
                     Console.WriteLine();
-                    Console.Write("Lv.");
-                    ConsoleUtility.ColorWrite($"{battleMonsters[i].Level} ", ConsoleColor.DarkRed);
-                    Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : ");
-                    ConsoleUtility.ColorWrite($"{randomAttack}", ConsoleColor.DarkRed);
-                    Console.WriteLine("]");
-                    Console.WriteLine();
-                    Console.Write("Lv.");
-                    ConsoleUtility.ColorWrite($"{player.level} ", ConsoleColor.DarkRed);
-                    Console.WriteLine($"{player.character}");
-                    Console.Write($"HP ");
-                    ConsoleUtility.ColorWrite($"{player.health} ", ConsoleColor.DarkRed);
-                    Console.Write("-> ");
+                    Console.WriteLine($"LV.{battleMonsters[i].Level} {battleMonsters[i].Name} 의 공격!");
 
-
-                    player.health -= randomAttack;
-
-                    if (player.health <= 0)
+                    if (MissAttack())
                     {
-                        Console.WriteLine("Dead");
+                        Console.Write($"{player.character} 을(를) 공격했지만 아무일도 일어나지 않았습니다.");
                     }
                     else
                     {
-                        ConsoleUtility.ColorWriteLine($"{player.health} ", ConsoleColor.DarkRed);
-                    }
+                        Console.Write($"{player.character} 을(를) 맞췄습니다. [데미지 : {randomAttack}]");
 
-                    Thread.Sleep(2000);
+                        if (isCritical)
+                        {
+                            Console.WriteLine(" - 치명타 공격!!");
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                        }
 
-                    if (player.health <= 0)
-                    {
-                        isClear = 2;
+                        Console.WriteLine();
+                        Console.WriteLine($"LV.{player.level} {player.character}");
+                        Console.Write($"HP {player.health} -> ");
+
+                        player.health -= randomAttack;
+
+                        if (player.health <= 0)
+                        {
+                            Console.WriteLine("Dead");
+                        }
+                        else
+                        {
+                            ConsoleUtility.ColorWriteLine($"{player.health} ", ConsoleColor.DarkRed);
+                        }
+
+                        Thread.Sleep(2000);
+
+                        if (player.health <= 0)
+                        {
+                            isClear = 2;
+                        }
                     }
                 }
             }
         }
     }
 }
+

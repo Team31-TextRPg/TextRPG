@@ -9,7 +9,7 @@ namespace TextRPG
 {
     public class Player
     {
-        public string character { get; private set; }
+        public string character { get; set; }
         public string jobClass { get; private set; }
         public int level { get; private set; }
         public int attack { get; private set; }
@@ -59,6 +59,35 @@ namespace TextRPG
             Console.WriteLine();
 
         }
+
+        public void Warrior()
+        {
+            jobClass = "전사";
+            attack = 10;
+            defense = 5;
+            maxHealth = 130; // 직업 전사일 때, HP 올라감
+            health = maxHealth;
+        }
+
+        public void Archer()
+        {
+            jobClass = "궁수";
+            attack = 14; // 직업 궁수일 때, 공격력 올라감
+            defense = 5;
+            maxHealth = 100;
+            health = maxHealth;
+        }
+
+        public void Theif()
+        {
+            jobClass = "도적";
+            attack = 10;
+            defense = 9; // 도적일 때, 방어력 올라감
+            maxHealth = 100;
+            health = maxHealth;
+
+        }
+
 
     }
 }
