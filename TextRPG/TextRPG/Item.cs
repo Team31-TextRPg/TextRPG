@@ -27,7 +27,7 @@ public class Item
 
     public string ItemDisplay() // 좀 이상함. 장착 관련 부분 차용했는데 
     {
-        string str = IsUsed ? "[사용됨] " : "";
+        string str = IsUsed ? "[장착됨] " : "";
         str += $"{Name} | {GetTypeString()} | {Description}";
         return str; 
     }
@@ -39,7 +39,7 @@ public class Item
             ItemType.Weapon => "무기",
             ItemType.Armor => "방어구",
             ItemType.HpPotion => "회복약",
-            _ => "알 수 없음"
+            ItemType.ManaPotion => "회복약"
         };
     }
     

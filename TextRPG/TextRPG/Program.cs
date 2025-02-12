@@ -600,29 +600,7 @@ namespace TextRPG
             Console.WriteLine(">>");
             int input = cu.GetBattleOverInput(0, 0);
         }
-
-        // public void PotionScreen() // 포션만 사용 스크린 (작업중)
-        // {
-        //     ConsoleUtility.Loading();
-        //     Console.Clear();
-        //     ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
-        //     Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
-        //     Console.WriteLine();
-        //     Console.WriteLine("1. 사용하기");
-        //     Console.WriteLine("0. 나가기");
-        //     int input = cu.GetInput(0, 1);
-        //     switch (input)
-        //     {
-        //         case 0:
-        //             MainScreen();
-        //             break;
-        //         case 1:
-        //             UsePotion(itemList[0]);
-        //             break;
-        //     }
-        // }
-
-
+        
 
         public void PlayerInventoryScreen(Inventory inventory)
         {
@@ -672,6 +650,21 @@ namespace TextRPG
                             Console.WriteLine("마력이 가득찬 상태에서 사용할 수 없습니다.");
                         }
                         break;
+	    
+                    case Item.ItemType.Armor:
+                        if (selectedItem.IsUsed)
+                        {
+                            Console.WriteLine($"{selectedItem.Name} 장착을 해제합니다.");
+                            selectedItem.IsUsed = false;
+                        }
+                        else
+                        {
+                            EquipArmor(selectedItem);
+                            Console.WriteLine($"{selectedItem.Name} 장착을 장착합니다.");
+                            selectedItem.IsUsed = true;
+                        }
+                        break;
+
                     
                     default:
                         Console.WriteLine("사용할 수 없는 아이템입니다.");
@@ -693,6 +686,11 @@ namespace TextRPG
         public void UseManaPotion(Item selectedItem)
         {
             player.mana = Math.Min(player.mana + selectedItem.Value, player.maxMana);
+        }
+        
+        public void EquipArmor(Item selectedItem)
+        {
+            player.defense = (player.defense + selectedItem.Value);
         }
 
         //  저장하기 장면 함수
