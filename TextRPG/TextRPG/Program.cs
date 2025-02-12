@@ -662,10 +662,9 @@ namespace TextRPG
                 {
                     Console.WriteLine("사용할 수 없는 아이템 입니다.");
                 }
-			    
+
                 // 아이템 사용 후 새로고침
-                Console.WriteLine("아무 키나 누르세요...");
-                Console.ReadKey();
+                Thread.Sleep(1000);
                 PlayerInventoryScreen(inventory, item); 
                 
             }
