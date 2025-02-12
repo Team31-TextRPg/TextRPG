@@ -46,8 +46,8 @@ namespace TextRPG
 
             questsList = new List<Quest>
             {
-                new Quest("","1. 작고 하찮은 미니언 처치","작고 하찮은 미니언들이 너무 많아졌다고 생각하지 않나?\n저놈들을 처치해버려!", "미니언 방패", 5),
-                new Quest("","2. 마음을 엄습하는 공허충 처치","추운 겨울에도 공허충은 내 옆구리를 시리게 할 수 없지!\n저놈들을 처치해버려!", "공허의 칼날", 5),
+                new Quest("","1. 작고 하찮은 미니언 처치","작고 하찮은 미니언들이 너무 많아졌다고 생각하지 않나?\n저놈들을 처치해버려!", "미니언 방패 (방어력 + 5)", 5),
+                new Quest("","2. 마음을 엄습하는 공허충 처치","추운 겨울에도 공허충은 내 옆구리를 시리게 할 수 없지!\n저놈들을 처치해버려!", "공허의 칼날 (공격력 + 5)", 5),
             };
 
         }
@@ -741,14 +741,25 @@ namespace TextRPG
         {
             Console.Clear();
             Console.WriteLine("Quest!!");
+            Console.WriteLine("원하는 퀘스트 선택하기"); 
             Console.WriteLine();
             Console.WriteLine(questsList[0].QuestId + questsList[0].QuestAcceptMessage);
             Console.WriteLine(questsList[1].QuestId + questsList[1].QuestAcceptMessage);
             Console.WriteLine();
-            Console.WriteLine("원하시는 퀘스트를 선택해주세요.");
-            Console.WriteLine(">>   ");
-            int questSelect = cu.GetInput(1, 2);
-            QuestSubScreen(questSelect);
+            Console.WriteLine("0.돌아가기");
+            int questSelect = cu.GetInput(0, 2);
+            switch (questSelect)
+            {
+                case 0:
+                    MainScreen();
+                    break;
+                case 1:
+                    QuestSubScreen(questSelect);
+                    break;
+                case 2:
+                    QuestSubScreen(questSelect);
+                    break;
+            }
         }
 
         public void QuestSubScreen(int questSelect)
@@ -779,7 +790,6 @@ namespace TextRPG
                     QuestScreen();
                     break;
             }
-
 
         }
 
