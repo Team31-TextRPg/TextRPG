@@ -21,8 +21,10 @@ namespace TextRPG
         Player player;
         Inventory inventory;
         Item item;
+        Quest quest;
         int floor;
         List<Monster> monsterList;
+        List<Quest> questsList;
 
         ConsoleUtility cu;
         public List<Item> itemList;
@@ -41,7 +43,14 @@ namespace TextRPG
                 new Monster(4,"칼날부리",30,5),
                 new Monster(5,"늑대",20,7)
             };
-            
+
+            questsList = new List<Quest>
+            {
+                new Quest(1,"마을을 위협하는 미니언 처치",5,"쓸만한 방패",5,false),
+                new Quest(2,"마을을 위협하는 공허충 처치",5,"쓸만한 검",5,false),
+                new Quest(3,"마을을 위협하는 공허충 처치",5,"쓸만한 가죽 갑옷",5,false),
+            };
+
         }
 
         public void IntroScreen()
@@ -77,9 +86,10 @@ namespace TextRPG
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
             Console.WriteLine("3. 인벤토리");
+            Console.WriteLine("4. 퀘스트 확인");
             Console.WriteLine();
 
-            int input = cu.GetInput(1, 3);
+            int input = cu.GetInput(1, 4);
             switch (input)
             {
                 case 1:
@@ -92,6 +102,9 @@ namespace TextRPG
                 case 3:
                     inventory = new Inventory();
                     PlayerInventoryScreen(inventory, item);
+                    break;
+                case 4:
+                    QuestScreen();
                     break;
             }
         }
@@ -722,6 +735,40 @@ namespace TextRPG
         public void UseHealthPotion()
         {
             player.health = Math.Min(player.health, player.maxHealth);
+        }
+
+        public void QuestScreen()
+        {
+            Console.Clear();
+            Console.WriteLine("Quest!!");
+            Console.WriteLine();
+            Console.WriteLine("원하는 퀘스트를 선택하세요.");
+            Console.WriteLine();
+
+            for (int i = 0; i < questsList.Count; i++)
+            {
+                Console.WriteLine($"{i+1}: {questsList[i].QuestContent}");
+            }
+            Console.WriteLine();
+
+            Console.WriteLine("0. 메인 화면으로 돌아가기.");
+
+            int input = cu.GetInput(0,3);
+            switch (input)
+            {
+                case 0:
+                    MainScreen();
+                    break;
+                case 1:
+                    //1번 퀘스트 보여주기
+                    break;
+                case 2:
+                    //2번 퀘스트 보여주기
+                    break;
+                case 3:
+                    //3번 퀘스트 보여주기
+                    break;
+            }
         }
         
     }
