@@ -13,7 +13,7 @@ namespace TextRPG
             itemQuantities = new Dictionary<string, int>();
         
             // 기본 아이템을 미리 추가
-            AddItem("HealthPotion", 5);
+            AddItem("HealthPotion", 3);
             AddItem("SlimeArmor", 1);
         }
 
