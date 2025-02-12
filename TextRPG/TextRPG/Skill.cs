@@ -1,15 +1,110 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TextRPG
 {
+    public class SkillConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(ISkill).IsAssignableFrom(objectType);
+        }
+
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        {
+            if (value is not ISkill skill) return;
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("$type");
+            writer.WriteValue(skill.GetType().FullName);
+
+            writer.WritePropertyName("name");
+            writer.WriteValue(skill.name);
+
+            writer.WritePropertyName("mpValue");
+            writer.WriteValue(skill.mpValue);
+
+            writer.WritePropertyName("damageValue");
+            writer.WriteValue(skill.damageValue);
+
+            writer.WritePropertyName("description");
+            writer.WriteValue(skill.description);
+
+            writer.WritePropertyName("isRandom");
+            writer.WriteValue(skill.isRandom);
+
+            writer.WriteEndObject();
+        }
+
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
+        {
+            reader.Read();
+            string? type = null;
+            ISkill? skill = null;
+
+            while (reader.TokenType != JsonToken.EndObject)
+            {
+                if (reader.TokenType == JsonToken.PropertyName)
+                {
+                    string? propertyName = reader.Value as string;
+                    reader.Read();
+
+                    if (propertyName == "$type")
+                    {
+                        type = reader.Value as string;
+                    }
+                    else if (propertyName == "name" && skill != null)
+                    {
+                        skill.name = reader.Value as string;
+                    }
+                    else if (propertyName == "mpValue" && skill != null)
+                    {
+                        skill.mpValue = reader.Value is int ? (int)reader.Value : Convert.ToInt32(reader.Value);
+                    }
+                    else if (propertyName == "damageValue" && skill != null)
+                    {
+                        skill.damageValue = reader.Value is float ? (float)reader.Value : Convert.ToSingle(reader.Value);
+                    }
+                    else if (propertyName == "description" && skill != null)
+                    {
+                        skill.description = reader.Value as string;
+                    }
+                    else if (propertyName == "isRandom" && skill != null)
+                    {
+                        skill.isRandom = (bool)reader.Value;
+                    }
+                }
+                reader.Read();
+            }
+
+            if (type != null)
+            {
+                // type에 따라 skill 객체 생성
+                if (type == typeof(AlphaStrike).FullName)
+                {
+                    skill = new AlphaStrike();
+                }
+                else if (type == typeof(DoubleStrike).FullName)
+                {
+                    skill = new DoubleStrike();
+                }
+            }
+
+            return skill;
+        }
+    }
+
     //  스킬 기본 구성 인터페이스
     public interface ISkill
     {
-        public string name { get; }
+        public string type { get; set; }
+        public string name { get; set; }
         public int mpValue { get; set; }
         public float damageValue { get; set; }
         public string description { get; set; }
@@ -22,9 +117,11 @@ namespace TextRPG
         public void Use(Player player, Battle battle, int input);
     }
 
+
     //  알파 스트라이크 스킬 클래스
     public class AlphaStrike : ISkill
     {
+        public string type { get; set; }
         public string name { get; set; }
         public int mpValue { get; set; }
         public float damageValue { get; set; }
@@ -33,6 +130,7 @@ namespace TextRPG
 
         public AlphaStrike()
         {
+            type = "AlphaStrike";
             name = "알파 스트라이크";
             mpValue = 10;
             damageValue = 2;
@@ -59,7 +157,7 @@ namespace TextRPG
             Console.WriteLine();
             Console.Write($"{battle.battleMonsters[input - 1].Name} 을(를) 맞췄습니다. [데미지 : {skillDamage}]");
             Console.WriteLine();
-            Console.WriteLine($"LV.{battle.battleMonsters[input-1].Level} {battle.battleMonsters[input - 1].Name}");
+            Console.WriteLine($"LV.{battle.battleMonsters[input - 1].Level} {battle.battleMonsters[input - 1].Name}");
             Console.Write($"HP {battle.battleMonsters[input - 1].Hp} -> ");
 
             battle.battleMonsters[input - 1].Hp -= skillDamage;
@@ -95,9 +193,11 @@ namespace TextRPG
         }
     }
 
+
     //  더블 스크라이크 스킬 클래스
     public class DoubleStrike : ISkill
     {
+        public string type { get; set; }
         public string name { get; set; }
         public int mpValue { get; set; }
         public float damageValue { get; set; }
@@ -106,6 +206,7 @@ namespace TextRPG
 
         public DoubleStrike()
         {
+            type = "DoubleStrike";
             name = "더블 스트라이크";
             mpValue = 15;
             damageValue = 1.5f;
@@ -132,7 +233,7 @@ namespace TextRPG
             {
                 int leaveCount = 0;
 
-                for(int j = 0; j < battle.battleMonsters.Count; j++)
+                for (int j = 0; j < battle.battleMonsters.Count; j++)
                 {
                     if (battle.battleMonsters[j].IsDead == false)
                     {

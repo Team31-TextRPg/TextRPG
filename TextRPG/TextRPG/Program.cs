@@ -20,18 +20,15 @@ namespace TextRPG
         Battle battle;
         Player player;
         Inventory inventory;
-        Item item;
-        int floor;
         List<Monster> monsterList;
 
         ConsoleUtility cu;
-        public List<Item> itemList;
 
         public GameManager()
         {
             player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 80, 100, 1500);
+            inventory = new Inventory();
             cu = new ConsoleUtility();
-            floor = 1;
 
             monsterList = new List<Monster>
             {
@@ -41,7 +38,7 @@ namespace TextRPG
                 new Monster(4,"칼날부리",30,5),
                 new Monster(5,"늑대",20,7)
             };
-            
+
         }
 
         public void IntroScreen()
@@ -63,7 +60,7 @@ namespace TextRPG
                     player.Archer();
                     break;
                 case 3:
-                    player.Theif();
+                    player.Thief();
                     break;
             }
             MainScreen();
@@ -75,23 +72,30 @@ namespace TextRPG
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
-            Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
+            Console.WriteLine($"2. 전투 시작 (현재 진행 : {player.floor}층)");
             Console.WriteLine("3. 인벤토리");
+            Console.WriteLine("4. 저장하기");
+            Console.WriteLine("5. 불러오기");
             Console.WriteLine();
 
-            int input = cu.GetInput(1, 3);
+            int input = cu.GetInput(1, 5);
             switch (input)
             {
                 case 1:
                     StatusScreen();
                     break;
                 case 2:
-                    battle = new Battle(player, monsterList, floor);
+                    battle = new Battle(player, monsterList, player.floor);
                     BattleScreen(battle);
                     break;
                 case 3:
-                    inventory = new Inventory();
-                    PlayerInventoryScreen(inventory, item);
+                    PlayerInventoryScreen(inventory);
+                    break;
+                case 4:
+                    SaveScreen(player);
+                    break;
+                case 5:
+                    LoadScreen(ref player, ref inventory);
                     break;
             }
         }
@@ -480,7 +484,7 @@ namespace TextRPG
             switch (player.level)
             {
                 case 1:
-                    if(player.exp >= player.maxExp)
+                    if (player.exp >= player.maxExp)
                     {
                         player.level++;
                         player.exp = player.exp - player.maxExp;
@@ -558,7 +562,7 @@ namespace TextRPG
             ConsoleUtility.ColorWriteLine($"{player.exp}", ConsoleColor.DarkRed);
             Console.WriteLine();
 
-            floor++;
+            player.floor++;
 
             Console.WriteLine("[획득 아이템]");
             int rewardGold = sumMonsterLevel * 70;
@@ -620,13 +624,13 @@ namespace TextRPG
 
 
 
-        public void PlayerInventoryScreen(Inventory inventory, Item item)
+        public void PlayerInventoryScreen(Inventory inventory)
         {
             Console.Clear();
             ConsoleUtility.ColorWriteLine("인벤토리", ConsoleColor.Cyan);
             Console.WriteLine();
             inventory.DisplayInventory();
-            
+
             // 사용 가능한 아이템 목록을 가져옴
             List<string> available = inventory.GetAvailableItems();
 
@@ -638,7 +642,7 @@ namespace TextRPG
             {
                 MainScreen();
             }
-            else  
+            else
             {
                 string selectedItemName = available[input - 1];
                 Item selectedItem = ItemDatabase.GetItem(selectedItemName);
@@ -671,16 +675,14 @@ namespace TextRPG
                     
                     default:
                         Console.WriteLine("사용할 수 없는 아이템입니다.");
-                        break;
-                    
-                }
-                
+                        break;       
+                }        
                 // 아이템 사용 후 새로고침
                 Thread.Sleep(1000);
-                PlayerInventoryScreen(inventory, item); 
+                PlayerInventoryScreen(inventory); 
                 
             }
-            
+
         }
 
         public void UseHealthPotion(Item selectedItem)
@@ -692,6 +694,70 @@ namespace TextRPG
         {
             player.mana = Math.Min(player.mana + selectedItem.Value, player.maxMana);
         }
-        
+
+        //  저장하기 장면 함수
+        public void SaveScreen(Player player)
+        {
+            Console.Clear();
+
+            Console.WriteLine("저장하기");
+            Console.WriteLine("현재까지 플레이한 데이터를 저장할 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("1. 저장하기");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+
+            int input = cu.GetInput(0, 1);
+            switch (input)
+            {
+                case 0:
+                    MainScreen();
+                    break;
+                case 1:
+                    DataSave(player);
+                    Console.WriteLine("데이터를 저장했습니다.");
+                    Thread.Sleep(1000);
+                    MainScreen();
+                    break;
+            }
+        }
+
+        public void DataSave(Player player)
+        {
+            player.Save("player.json");
+            inventory.Save("Inventory.json");
+        }
+
+        //  불러오기 장면 함수
+        public void LoadScreen(ref Player player, ref Inventory inventory)
+        {
+            Console.Clear();
+
+            Console.WriteLine("불러오기");
+            Console.WriteLine("이전에 저장했던 데이터를 불러올 수 있습니다.");
+            Console.WriteLine();
+            Console.WriteLine("1. 불러오기");
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine();
+
+            int input = cu.GetInput(0, 1);
+            switch (input)
+            {
+                case 0:
+                    MainScreen();
+                    break;
+                case 1:
+                    DataLoad(ref player, ref inventory);
+                    Console.WriteLine("데이터를 불러왔습니다.");
+                    Thread.Sleep(1000);
+                    MainScreen();
+                    break;
+            }
+        }
+        public void DataLoad(ref Player player, ref Inventory inventory)
+        {
+            player = Player.Load("player.json");
+            inventory = Inventory.Load("inventory.json");
+        }
     }
 }
