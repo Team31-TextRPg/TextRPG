@@ -78,13 +78,13 @@ namespace TextRPG
         public void DisplayInventory()
         {
             List<string> available = GetAvailableItems();
+            
             if (available.Count == 0)
             {
                 Console.WriteLine("인벤토리가 비어 있습니다.");
                 return;
             }
 
-            Console.WriteLine("[보유한 아이템 목록]");
             int index = 1;
             foreach (var itemName in available)
             {

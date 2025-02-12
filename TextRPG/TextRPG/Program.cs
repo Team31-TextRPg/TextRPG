@@ -41,13 +41,7 @@ namespace TextRPG
                 new Monster(4,"칼날부리",30,5),
                 new Monster(5,"늑대",20,7)
             };
-
-            // itemList = new List<Item>
-            // {
-            //     new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: false),
-            //     new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: false),
-            //     new Item(name: "붉은 포션", type: Item.ItemType.HpPotion, value: 30, description: "30 HP 회복됩니다.", isUsed: false)
-            // };
+            
         }
 
         public void IntroScreen()
@@ -82,7 +76,7 @@ namespace TextRPG
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
-            Console.WriteLine("3. (접근용) 인벤토리");
+            Console.WriteLine("3. 인벤토리");
             Console.WriteLine();
 
             int input = cu.GetInput(1, 3);
@@ -341,7 +335,7 @@ namespace TextRPG
             {
                 MainScreen();
             }
-            else  //사용한다로 간주
+            else  
             {
                 string selectedItemName = available[input - 1];
                 Item selectedItem = ItemDatabase.GetItem(selectedItemName);
@@ -350,7 +344,7 @@ namespace TextRPG
                 {
                     if (player.health < player.maxHealth)
                     {
-                        UseHealthPotion(); //플레이어 스텟 변경
+                        UseHealthPotion(); // 플레이어 스텟 변경
                         inventory.UseItem(selectedItemName);
                         
                     }
