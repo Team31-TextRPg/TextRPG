@@ -25,6 +25,7 @@ namespace TextRPG
         int floor;
         List<Monster> monsterList;
         List<Quest> questsList;
+        List<Quest> concentQuest;
 
         ConsoleUtility cu;
         public List<Item> itemList;
@@ -46,9 +47,14 @@ namespace TextRPG
 
             questsList = new List<Quest>
             {
-                new Quest(1,"마을을 위협하는 미니언 처치",5,"쓸만한 방패",5,false),
-                new Quest(2,"마을을 위협하는 공허충 처치",5,"쓸만한 검",5,false),
-                new Quest(3,"마을을 위협하는 공허충 처치",5,"쓸만한 가죽 갑옷",5,false),
+                new Quest(1,"마을을 위협하는 미니언 처치",5,0,"쓸만한 방패",5,false),
+                new Quest(2,"마을을 위협하는 공허충 처치",5,0, "쓸만한 검",5,false),
+                new Quest(3,"마을을 위협하는 대포 미니언 처치",3,0,"쓸만한 가죽 갑옷",10,false),
+            };
+
+            concentQuest = new List<Quest>
+            {
+
             };
 
         }
@@ -742,15 +748,23 @@ namespace TextRPG
             Console.Clear();
             Console.WriteLine("Quest!!");
             Console.WriteLine();
-            Console.WriteLine("원하는 퀘스트를 선택하세요.");
+            Console.WriteLine("수락되지 않은 퀘스트.");
+            Console.WriteLine("확인을 원하는 퀘스트를 선택하세요.");
             Console.WriteLine();
 
-            for (int i = 0; i < questsList.Count; i++)
+            for (int i = 0; i < questsList.Count; i++) //수락되지 않은 퀘스트 목록
             {
                 Console.WriteLine($"{i+1}: {questsList[i].QuestContent}");
             }
             Console.WriteLine();
+            Console.WriteLine("수락 된 퀘스트");
+            Console.WriteLine();
 
+            for (int i = 0; i < concentQuest.Count; i++) //수락 된 퀘스트 목록
+            {
+                Console.WriteLine($"{questsList.Count + 1}: {concentQuest[i].QuestContent}");
+            }
+            Console.WriteLine();
             Console.WriteLine("0. 메인 화면으로 돌아가기.");
 
             int input = cu.GetInput(0,3);
@@ -760,16 +774,67 @@ namespace TextRPG
                     MainScreen();
                     break;
                 case 1:
-                    //1번 퀘스트 보여주기
+                    //미니언 퀘스트 보여주기
+                    MinionQuestDetail();
                     break;
                 case 2:
-                    //2번 퀘스트 보여주기
+                    //공허충 퀘스트 보여주기
                     break;
                 case 3:
                     //3번 퀘스트 보여주기
                     break;
             }
         }
-        
+
+        public void MinionQuestDetail()
+        {
+            int i = 0;
+            Console.Clear();
+            Console.WriteLine($"Quest!!!");
+            Console.WriteLine();
+            Console.WriteLine($"- 목표 -");
+            Console.WriteLine($"\n{questsList[i].QuestContent}, {questsList[i].QuestGoal}마리 : ({questsList[i].UnderWay}/{questsList[i].QuestGoal})");
+
+            Console.WriteLine("- 보상 -");
+            Console.WriteLine($"\n{questsList[i].QuestReward}");
+            Console.WriteLine($"{questsList[i].QuestGold} G");
+            Console.WriteLine();
+
+            Console.WriteLine("1. 수락");
+            Console.WriteLine("2. 거절");
+            Console.WriteLine();
+            Console.Write("원하시는 행동을 입력해주세요: ");
+
+            int input = cu.GetInput(1,2);
+
+            if (input == 1)
+            {
+                Console.WriteLine($"퀘스트 [{questsList[i].QuestContent}]을/를 수락했습니다!");
+                Console.WriteLine();
+                Console.WriteLine("0. 돌아가기");
+                concentQuest.AddRange(questsList.Where(q => q.QuestId == 1));
+                questsList.RemoveAt(i);
+
+                string Yes = Console.ReadLine();
+
+                if (Yes == "0") { QuestScreen(); }
+
+            }
+            else if (input == 2)
+            {
+                Console.WriteLine($"퀘스트 [{questsList[i].QuestContent}]을/를 거절했습니다");
+                Console.WriteLine();
+                Console.WriteLine("0. 돌아가기");
+
+                string Yes = Console.ReadLine();
+
+                if (Yes == "0") { QuestScreen(); }
+            }
+            else
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+        }
+
     }
 }
