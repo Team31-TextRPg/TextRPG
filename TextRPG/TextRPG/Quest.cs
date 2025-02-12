@@ -1,4 +1,5 @@
 ﻿using System;
+<<<<<<< Updated upstream
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,12 +82,12 @@ namespace TextRPG
                                 cheack = true;
                             }
                         }
-                        // 아이템을 습득하지 않은 상태였다면 아이템을 획득
-                        if (cheack == false)
+
+                        if (cheack == false)  // 아이템을 습득하지 않은 상태였다면
                         {
-                            foreach (Items items in shopitems)
+                            foreach (Items item in shopitems)  
                             {
-                                if (items.ItemName == rewardItem.ItemName)
+                                if (item.ItemName == rewardItem.ItemName)
                                 {
                                     // 플레이어 장비에 아이템 추가
                                     rewardItem.IsPurchase = true;
@@ -247,11 +248,27 @@ namespace TextRPG
 
         // 새로시작 시 퀘스트 생성
         public Quest(bool check)
+=======
+using TextRPG;
+
+namespace TextRPG
+{
+    internal class Quest
+    {
+        public List<QuestInfo> QuestInfos { get; set; } = new List<QuestInfo>(); // 진행 중인 퀘스트 저장
+
+        private Hunting hunt = new Hunting();        // 1. 몬스터 사냥 퀘스트
+        private EquipItem equip = new EquipItem();   // 2. 장비 착용 퀘스트
+        private PowerUp power = new PowerUp();       // 3. 캐릭터 강화 퀘스트
+
+        public Quest()    // 3가지 퀘스트를 QuestInfos 리스트에 추가
+>>>>>>> Stashed changes
         {
             QuestInfos.Add(hunt);
             QuestInfos.Add(equip);
             QuestInfos.Add(power);
         }
+<<<<<<< Updated upstream
         // 이어하기 시 퀘스트 로드
         public Quest()
         {
@@ -318,8 +335,59 @@ namespace TextRPG
             }
             // 보상을 미획득한 퀘스트만 갱신
             return _quests = newQuest;
+=======
+
+        public Quest(List<QuestInfo> quests)  // 퀘스트를 저장/로드
+        {
+            QuestInfos = quests ?? new List<QuestInfo>();
+        }
+
+        public void QuestDisplay(Player _charactor, List<Item> _items)
+        {
+            QuestInfos = RemoveQuest(QuestInfos);  // 완료한 퀘스트 정리, 진행 중인 퀘스트만 남김.
+
+            if (QuestInfos.Count == 0)
+            {
+                Console.WriteLine("현재 진행 중인 퀘스트가 없습니다.");
+                return;
+            }
+
+            Console.WriteLine("Quest!!\n\n");
+            Console.WriteLine("0. 나가기");
+
+            for (int i = 0; i < QuestInfos.Count; i++)
+            {
+                string accept = QuestInfos[i].access ? "O" : "X";
+                Console.WriteLine($"{i + 1}. [수락 {accept}] {QuestInfos[i].questName}");
+            }
+
+            Console.WriteLine("\n\n");
+
+            int choice;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 0 || choice > QuestInfos.Count)
+            {
+                Console.WriteLine("올바른 숫자를 입력하세요.");
+            }
+
+            if (choice == 0) return;
+
+            bool restart = QuestInfos[choice - 1].QuestShow(_charactor, _items, false);
+
+            if (restart)
+            {
+                QuestStatus(_charactor, _items);
+            }
+        }
+
+        private List<QuestInfo> RemoveQuest(List<QuestInfo> _quests)
+        {
+            return _quests.FindAll(q => !q.rewardCheck);
+>>>>>>> Stashed changes
         }
     }
 }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes

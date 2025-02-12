@@ -80,7 +80,12 @@ namespace TextRPG
             }
         }
 
+<<<<<<< Updated upstream
         public int JobInput(int min, int max)    // 직업을 선택하는 함수
+=======
+
+        public int JobInput(int min, int max)
+>>>>>>> Stashed changes
         {
             while (true)
             {

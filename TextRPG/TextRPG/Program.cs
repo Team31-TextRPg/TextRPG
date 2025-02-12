@@ -17,6 +17,9 @@ namespace TextRPG
     //  게임이 시작될 때 필요한 모든 것들을 생성하는 클래스
     public class GameManager
     {
+
+        ConsoleUtility cu;
+
         Battle battle;
         Player player;
         Quest quest;
@@ -26,6 +29,17 @@ namespace TextRPG
         public List<Quest> questList = new List<Quest>();    // 퀘스트 전체 정보
 
         ConsoleUtility cu;
+=======
+        Inventory inventory;
+        Item item;
+        int floor;
+        Quest quest;
+        QuestInfo questinfo;
+
+        List<Monster> monsterList;
+        public List<Item> itemList;
+>>>>>>> Stashed changes
+
 
         public GameManager()
         {
@@ -83,12 +97,17 @@ namespace TextRPG
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
+<<<<<<< Updated upstream
             Console.WriteLine("2. 전투 시작");
             Console.WriteLine("3. 회복 아이템");
+=======
+            Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
+            Console.WriteLine("3. 인벤토리");
+>>>>>>> Stashed changes
             Console.WriteLine("4. 퀘스트");
             Console.WriteLine();
 
-            int input = cu.GetInput(1, 3);
+            int input = cu.GetInput(1, 4);
             switch (input)
             {
                 case 1:
@@ -104,6 +123,9 @@ namespace TextRPG
                 case 4:
                     QuestScreen();
                     break;
+                case 4:
+                    quest = new Quest();
+                    QuestScreen();
             }
         }
 
@@ -422,7 +444,70 @@ namespace TextRPG
 
     }
 
+<<<<<<< Updated upstream
 
 
+=======
+        // 아이템 사용 매서드 - 이전 사용매서드
+        // public int UsePotion(Item item)
+        // {
+        //
+        //     Console.Clear();
+        //     ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
+        //     Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
+        //     Console.WriteLine();
+        //
+        //     if (item.IsUsed && item.Type == Item.ItemType.HpPotion) // 선택된 item.IsUsed가 True 이고 아이템의 타입이 HpPotion 이면
+        //     {
+        //
+        //         if (player.health < player.maxHealth)
+        //         {
+        //             UseHealthPotion(itemList[0]);
+        //             itemList.Remove(item); // 사용 후 아이템 삭제
+        //             Console.Clear();
+        //             ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
+        //             Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
+        //             Console.WriteLine();
+        //         }
+        //         else if (player.health == player.maxHealth)
+        //         {
+        //             Console.WriteLine($"체력이 가득찬 상태에서 {item.Name}을(를) 사용할 수 없습니다.");
+        //             Console.WriteLine();
+        //         }
+        //     }
+        //
+        //     Console.WriteLine("1. 사용하기");
+        //     Console.WriteLine("0. 나가기");
+        //     int input = cu.GetInput(0, 1);
+        //     switch (input)
+        //     {
+        //         case 0:
+        //             PotionScreen();
+        //             break;
+        //         case 1:
+        //             UsePotion(item);
+        //
+        //             break;
+        //     }
+        //     return player.health;
+        //
+        // }
+
+
+        public void UseHealthPotion()
+        {
+            player.health = Math.Min(player.health, player.maxHealth);
+        }
+
+
+        public void QuestScreen()
+        {
+            quest.QuestStatus();
+            int input = cu.GetInput(0, 0);
+            MainScreen();
+        }
+
+        
+>>>>>>> Stashed changes
     }
 }
