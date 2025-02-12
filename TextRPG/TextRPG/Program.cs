@@ -22,14 +22,14 @@ namespace TextRPG
 
         Battle battle;
         Player player;
-        Quest quest;
+        QuestInfo questInfo;
 
         List<Monster> monsterList;
         public List<Item> itemList;
-        public List<Quest> questList = new List<Quest>();    // 퀘스트 전체 정보
+        public List<QuestInfo> questList;    // 퀘스트 전체 정보
 
         ConsoleUtility cu;
-=======
+
         Inventory inventory;
         Item item;
         int floor;
@@ -38,8 +38,6 @@ namespace TextRPG
 
         List<Monster> monsterList;
         public List<Item> itemList;
->>>>>>> Stashed changes
-
 
         public GameManager()
         {
@@ -97,13 +95,10 @@ namespace TextRPG
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("1. 상태 보기");
-<<<<<<< Updated upstream
             Console.WriteLine("2. 전투 시작");
             Console.WriteLine("3. 회복 아이템");
-=======
             Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
             Console.WriteLine("3. 인벤토리");
->>>>>>> Stashed changes
             Console.WriteLine("4. 퀘스트");
             Console.WriteLine();
 
@@ -124,8 +119,8 @@ namespace TextRPG
                     QuestScreen();
                     break;
                 case 4:
-                    quest = new Quest();
                     QuestScreen();
+                    break;
             }
         }
 
