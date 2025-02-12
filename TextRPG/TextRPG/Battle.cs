@@ -15,6 +15,7 @@ namespace TextRPG
         public List<Monster> monsters { get; set; }
         public List<Monster> battleMonsters { get; set; }
 
+
         //  Battle 클래스 생성자
         public Battle(Player player, List<Monster> monsters, int floor)
         {

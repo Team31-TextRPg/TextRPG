@@ -10,22 +10,24 @@ namespace TextRPG
         {
             GameManager gm = new GameManager();
             gm.IntroScreen();
-
         }
     }
 
     //  게임이 시작될 때 필요한 모든 것들을 생성하는 클래스
     public class GameManager
     {
+        ConsoleUtility cu;
+
         Battle battle;
         Player player;
         Inventory inventory;
         Item item;
         int floor;
-        List<Monster> monsterList;
+        Quest quest;
 
-        ConsoleUtility cu;
+        List<Monster> monsterList;
         public List<Item> itemList;
+        List<Quest> questsList;
 
         public GameManager()
         {
@@ -41,7 +43,13 @@ namespace TextRPG
                 new Monster(4,"칼날부리",30,5),
                 new Monster(5,"늑대",20,7)
             };
-            
+
+            questsList = new List<Quest>
+            {
+                new Quest("","1. 작고 하찮은 미니언 처치","작고 하찮은 미니언들이 너무 많아졌다고 생각하지 않나?\n저놈들을 처치해버려!", "미니언 방패", 5),
+                new Quest("","2. 마음을 엄습하는 공허충 처치","추운 겨울에도 공허충은 내 옆구리를 시리게 할 수 없지!\n저놈들을 처치해버려!", "공허의 칼날", 5),
+            };
+
         }
 
         public void IntroScreen()
@@ -77,9 +85,10 @@ namespace TextRPG
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine($"2. 전투 시작 (현재 진행 : {floor}층)");
             Console.WriteLine("3. 인벤토리");
+            Console.WriteLine("4. 퀘스트");
             Console.WriteLine();
 
-            int input = cu.GetInput(1, 3);
+            int input = cu.GetInput(1, 4);
             switch (input)
             {
                 case 1:
@@ -92,6 +101,9 @@ namespace TextRPG
                 case 3:
                     inventory = new Inventory();
                     PlayerInventoryScreen(inventory, item);
+                    break;
+                case 4:
+                    QuestScreen();
                     break;
             }
         }
@@ -723,6 +735,53 @@ namespace TextRPG
         {
             player.health = Math.Min(player.health, player.maxHealth);
         }
-        
+
+
+        public void QuestScreen()
+        {
+            Console.Clear();
+            Console.WriteLine("Quest!!");
+            Console.WriteLine();
+            Console.WriteLine(questsList[0].QuestId + questsList[0].QuestAcceptMessage);
+            Console.WriteLine(questsList[1].QuestId + questsList[1].QuestAcceptMessage);
+            Console.WriteLine();
+            Console.WriteLine("원하시는 퀘스트를 선택해주세요.");
+            Console.WriteLine(">>   ");
+            int questSelect = cu.GetInput(1, 2);
+            QuestSubScreen(questSelect);
+        }
+
+        public void QuestSubScreen(int questSelect)
+        {
+            Console.Clear();
+            Console.WriteLine("Quest!!");
+            Console.WriteLine();
+            Console.WriteLine(questsList[questSelect - 1].QuestId);
+            Console.WriteLine(questsList[questSelect - 1].QuestContent);
+            Console.WriteLine();
+            Console.WriteLine($"-5마리 처치");
+            Console.WriteLine("\n- 보상 -");
+            Console.WriteLine(questsList[questSelect - 1].QuestReward + " X 1");
+            Console.WriteLine(questsList[questSelect - 1].QuestGold + "G\n");
+            Console.WriteLine("0.돌아가기");
+            Console.WriteLine("1. 수락");
+            int questOK = cu.GetInput(0, 1);
+            switch (questOK)
+            {
+                case 0:
+                    QuestScreen();
+                    break;
+                case 1:
+                    Console.WriteLine();
+                    Console.Write("퀘스트를 수락하셨습니다.");
+                    questsList[questSelect - 1].questAccept = true;
+                    questsList[questSelect - 1].Acceppt();
+                    QuestScreen();
+                    break;
+            }
+
+
+        }
+
     }
 }
