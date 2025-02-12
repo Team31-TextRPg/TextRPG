@@ -29,7 +29,7 @@ namespace TextRPG
 
         public GameManager()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 1500);
+            player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 80, 100, 1500);
             cu = new ConsoleUtility();
             floor = 1;
 
@@ -281,9 +281,9 @@ namespace TextRPG
             Console.Write("/");
             ConsoleUtility.ColorWriteLine($"{player.maxHealth} ", ConsoleColor.DarkRed);
             Console.Write("MP ");
-            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"{player.mana}", ConsoleColor.DarkRed);
             Console.Write("/");
-            ConsoleUtility.ColorWriteLine($"{player.maxMp} ", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWriteLine($"{player.maxMana} ", ConsoleColor.DarkRed);
             Console.WriteLine();
 
             for (int i = 0; i < player.skillList.Count; i++)
@@ -302,7 +302,7 @@ namespace TextRPG
             }
             else if (input >= 1 && input <= player.skillList.Count)
             {
-                if (player.mp < player.skillList[input - 1].mpValue)
+                if (player.mana < player.skillList[input - 1].mpValue)
                 {
                     Console.WriteLine("Mp가 부족합니다.");
                     Thread.Sleep(1000);
@@ -544,14 +544,14 @@ namespace TextRPG
             Console.Write(" -> ");
             ConsoleUtility.ColorWriteLine($"{player.health}", ConsoleColor.DarkRed);
             Console.Write("MP ");
-            ConsoleUtility.ColorWrite($"{player.mp}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWrite($"{player.mana}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
-            player.mp += 10;
-            if(player.mp > player.maxMp)
+            player.mana += 10;
+            if(player.mana > player.maxMana)
             {
-                player.mp = player.maxMp;
+                player.mana = player.maxMana;
             }
-            ConsoleUtility.ColorWriteLine($"{player.mp}", ConsoleColor.DarkRed);
+            ConsoleUtility.ColorWriteLine($"{player.mana}", ConsoleColor.DarkRed);
             Console.Write("Exp ");
             ConsoleUtility.ColorWrite($"{curExp}", ConsoleColor.DarkRed);
             Console.Write(" -> ");
@@ -643,26 +643,38 @@ namespace TextRPG
                 string selectedItemName = available[input - 1];
                 Item selectedItem = ItemDatabase.GetItem(selectedItemName);
                 
-                if (selectedItem.Type == Item.ItemType.HpPotion)
+                switch (selectedItem.Type)
                 {
-                    if (player.health < player.maxHealth)
-                    {
-                        UseHealthPotion(); // 플레이어 스텟 변경
-                        inventory.UseItem(selectedItemName);
-                        
-                    }
-                    else if (player.health == player.maxHealth)
-                    {
-                        Console.WriteLine("체력이 가득찬 상태에서 사용할 수 없습니다.");
-                    }
-					          
+                    case Item.ItemType.HpPotion:
+                        if (player.health < player.maxHealth)
+                        {
+                            UseHealthPotion(selectedItem);
+                            inventory.UseItem(selectedItemName);
+                        }
+                        else
+                        {
+                            Console.WriteLine("체력이 가득찬 상태에서 사용할 수 없습니다.");
+                        }
+                        break;
+                    
+                    case Item.ItemType.ManaPotion:
+                        if (player.mana < player.maxMana)
+                        {
+                            UseManaPotion(selectedItem);
+                            inventory.UseItem(selectedItemName);
+                        }
+                        else
+                        {
+                            Console.WriteLine("마력이 가득찬 상태에서 사용할 수 없습니다.");
+                        }
+                        break;
+                    
+                    default:
+                        Console.WriteLine("사용할 수 없는 아이템입니다.");
+                        break;
+                    
                 }
-			          
-                else
-                {
-                    Console.WriteLine("사용할 수 없는 아이템 입니다.");
-                }
-
+                
                 // 아이템 사용 후 새로고침
                 Thread.Sleep(1000);
                 PlayerInventoryScreen(inventory, item); 
@@ -671,57 +683,14 @@ namespace TextRPG
             
         }
 
-
-
-
-        // 아이템 사용 매서드 - 이전 사용매서드
-        // public int UsePotion(Item item)
-        // {
-        //
-        //     Console.Clear();
-        //     ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
-        //     Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
-        //     Console.WriteLine();
-        //
-        //     if (item.IsUsed && item.Type == Item.ItemType.HpPotion) // 선택된 item.IsUsed가 True 이고 아이템의 타입이 HpPotion 이면
-        //     {
-        //
-        //         if (player.health < player.maxHealth)
-        //         {
-        //             UseHealthPotion(itemList[0]);
-        //             itemList.Remove(item); // 사용 후 아이템 삭제
-        //             Console.Clear();
-        //             ConsoleUtility.ColorWriteLine("회복", ConsoleColor.Cyan);
-        //             Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {itemList.Count})");
-        //             Console.WriteLine();
-        //         }
-        //         else if (player.health == player.maxHealth)
-        //         {
-        //             Console.WriteLine($"체력이 가득찬 상태에서 {item.Name}을(를) 사용할 수 없습니다.");
-        //             Console.WriteLine();
-        //         }
-        //     }
-        //
-        //     Console.WriteLine("1. 사용하기");
-        //     Console.WriteLine("0. 나가기");
-        //     int input = cu.GetInput(0, 1);
-        //     switch (input)
-        //     {
-        //         case 0:
-        //             PotionScreen();
-        //             break;
-        //         case 1:
-        //             UsePotion(item);
-        //
-        //             break;
-        //     }
-        //     return player.health;
-        //
-        // }
-
-        public void UseHealthPotion()
+        public void UseHealthPotion(Item selectedItem)
         {
-            player.health = Math.Min(player.health, player.maxHealth);
+            player.health = Math.Min(player.health + selectedItem.Value, player.maxHealth);
+        }
+        
+        public void UseManaPotion(Item selectedItem)
+        {
+            player.mana = Math.Min(player.mana + selectedItem.Value, player.maxMana);
         }
         
     }

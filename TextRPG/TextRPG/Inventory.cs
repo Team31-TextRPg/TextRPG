@@ -14,6 +14,7 @@ namespace TextRPG
         
             // 기본 아이템을 미리 추가
             AddItem("HealthPotion", 3);
+            AddItem("ManaPotion", 3);
             AddItem("SlimeArmor", 1);
         }
 
@@ -35,17 +36,9 @@ namespace TextRPG
         {
             if (itemQuantities.ContainsKey(itemName))
             {
-                if (itemQuantities[itemName] > 0)
-                {
-                    itemQuantities[itemName]--;
-                    Console.WriteLine($"{itemName} 사용됨. 남은 개수: {itemQuantities[itemName]}");
-                    return true;
-                }
-                else
-                {
-                    Console.WriteLine($"{itemName}의 보유 개수가 0입니다.");
-                    return false;
-                }
+                itemQuantities[itemName]--;
+                Console.WriteLine($"{itemName} 사용됨. 남은 개수: {itemQuantities[itemName]}");
+                return true;
             }
             else
             {
