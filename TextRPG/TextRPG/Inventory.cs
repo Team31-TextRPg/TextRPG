@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace TextRPG
     public class Inventory
     {
         // 플레이어가 소유한 아이템: 아이템 이름과 보유 개수를 관리하는 딕셔너리
-        private Dictionary<string, int> itemQuantities;
+        public Dictionary<string, int> itemQuantities;
 
         public Inventory()
         {
@@ -95,6 +96,20 @@ namespace TextRPG
                 Console.WriteLine($"{index}. {display} (x{quantity})");
                 index++;
             }
+        }
+
+        //  Inventory 클래스의 데이터를 저장하는 함수
+        public void Save(string filePath)
+        {
+            string json = JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(filePath, json);
+        }
+
+        //  Inventory 클래스의 데이터를 불러오는 함수
+        public static Inventory Load(string filePath)
+        {
+            string json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<Inventory>(json);
         }
     }
 }

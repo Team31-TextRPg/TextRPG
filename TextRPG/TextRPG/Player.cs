@@ -1,23 +1,24 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-
 namespace TextRPG
 {
     public class Player
     {
+        public int floor { get; set; }
         public string character { get; set; }
-        public string jobClass { get; private set; }
+        public string jobClass { get; set; }
         public int level { get; set; }
         public int exp { get; set; }
         public int maxExp { get; set; }
         public float attack { get; set; }
         public int defense { get; set; }
         public int health { get; set; }
-        public int maxHealth { get; private set; }
+        public int maxHealth { get; set; }
         public int mp { get; set; }
         public int maxMp { get; set; }
         public int gold { get; set; }
@@ -25,6 +26,7 @@ namespace TextRPG
 
         public Player(string name, string job, int level, int attackPower, int defensePower, int health, int maxhealth, int gold) // 플레이어 생성자
         {
+            floor = 1;
             character = name;
             jobClass = job;
             this.level = level;
@@ -100,7 +102,7 @@ namespace TextRPG
             health = maxHealth;
         }
 
-        public void Theif()
+        public void Thief()
         {
             jobClass = "도적";
             attack = 10;
@@ -110,6 +112,22 @@ namespace TextRPG
 
         }
 
+        //  Player 클래스의 데이터를 저장하는 함수
+        public void Save(string filePath)
+        {
+            var settings = new JsonSerializerSettings();
+            settings.Converters.Add(new SkillConverter());
+            string json = JsonConvert.SerializeObject(this, settings);
+            File.WriteAllText(filePath, json);
+        }
 
+        //  Player 클래스의 데이터를 불러오는 함수
+        public static Player Load(string filePath)
+        {
+            string json = File.ReadAllText(filePath);
+            var settings = new JsonSerializerSettings();
+            settings.Converters.Add(new SkillConverter());
+            return JsonConvert.DeserializeObject<Player>(json, settings);
+        }
     }
 }
