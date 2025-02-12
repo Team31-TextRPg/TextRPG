@@ -146,7 +146,7 @@ namespace TextRPG
 
         public void Use(Player player, Battle battle, int input)
         {
-            player.mp -= mpValue;
+            player.mana -= mpValue;
 
             int skillDamage = (int)Math.Ceiling(player.attack * 2.0f);
 
@@ -222,7 +222,7 @@ namespace TextRPG
 
         public void Use(Player player, Battle battle, int input)
         {
-            player.mp -= mpValue;
+            player.mana -= mpValue;
 
             Random rand = new Random();
 
