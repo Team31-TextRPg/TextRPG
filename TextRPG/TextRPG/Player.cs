@@ -15,10 +15,12 @@ namespace TextRPG
         public int attack { get; private set; }
         public int defense { get; private set; }
         public int health { get; set; }
-        public int maxHealth { get; private set; }
+        public int maxHealth { get; private set; } 
+        public int mana { get; set; } // (확인 후 삭제) 마나 추가
+        public int maxMana { get; private set; } // (확인 후 삭제) 마나 추가
         public int gold { get; private set; }
 
-        public Player(string name, string job, int level, int attackPower, int defensePower, int health, int maxhealth, int gold) // 플레이어 생성자
+        public Player(string name, string job, int level, int attackPower, int defensePower, int health, int maxhealth, int mana, int maxmana, int gold) // 플레이어 생성자 // (확인 후 삭제) 마나 추가
         {
             character = name;
             jobClass = job;
@@ -27,6 +29,8 @@ namespace TextRPG
             defense = defensePower;
             this.health = health;
             maxHealth = maxhealth;
+            this.mana = mana; // (확인 후 삭제) 마나 추가
+            maxMana = maxmana; // (확인 후 삭제) 마나 추가
             this.gold = gold;
         }
         public void ShowStatus()
@@ -50,6 +54,11 @@ namespace TextRPG
             ConsoleUtility.ColorWrite($"{health}", ConsoleColor.Red);
             Console.Write(" / ");
             ConsoleUtility.ColorWriteLine($"{maxHealth}", ConsoleColor.Red);
+            // (확인 후 삭제) 마나 추가
+            Console.Write("마 력 : ");
+            ConsoleUtility.ColorWrite($"{mana}", ConsoleColor.Red);
+            Console.Write(" / ");
+            ConsoleUtility.ColorWriteLine($"{maxMana}", ConsoleColor.Red);
             //Console.WriteLine($"Gold : {gold} G");
             Console.Write("Gold : ");
             ConsoleUtility.ColorWrite($"{gold} " , ConsoleColor.Red);
@@ -67,6 +76,8 @@ namespace TextRPG
             defense = 5;
             maxHealth = 130; // 직업 전사일 때, HP 올라감
             health = maxHealth;
+            maxMana = 100; // (확인 후 삭제) 마나 추가
+            mana = maxMana; // (확인 후 삭제) 마나 추가
         }
 
         public void Archer()
@@ -76,6 +87,8 @@ namespace TextRPG
             defense = 5;
             maxHealth = 100;
             health = maxHealth;
+            maxMana = 100; // (확인 후 삭제) 마나 추가
+            mana = maxMana; // (확인 후 삭제) 마나 추가
         }
 
         public void Theif()
@@ -85,7 +98,8 @@ namespace TextRPG
             defense = 9; // 도적일 때, 방어력 올라감
             maxHealth = 100;
             health = maxHealth;
-
+            maxMana = 100; // (확인 후 삭제) 마나 추가
+            mana = maxMana; // (확인 후 삭제) 마나 추가
         }
 
 

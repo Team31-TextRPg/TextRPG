@@ -29,7 +29,7 @@ namespace TextRPG
 
         public GameManager()
         {
-            player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 1500);
+            player = new Player("Chad", "전사", 1, 10, 5, 80, 100, 80, maxmana:100, gold:500);
             cu = new ConsoleUtility();
             floor = 1;
 
@@ -420,6 +420,11 @@ namespace TextRPG
         public void UseHealthPotion()
         {
             player.health = Math.Min(player.health, player.maxHealth);
+        }
+        
+        public void UseManaPotion()
+        {
+            player.mana = Math.Min(player.mana, player.maxMana);
         }
         
     }

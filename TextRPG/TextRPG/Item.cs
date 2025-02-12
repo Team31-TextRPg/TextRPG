@@ -7,6 +7,7 @@ public class Item
         Weapon,
         Armor,
         HpPotion,
+        ManaPotion,
     }
     
     public string Name {get;}
