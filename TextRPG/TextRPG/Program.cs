@@ -652,16 +652,17 @@ namespace TextRPG
                         break;
 	    
                     case Item.ItemType.Armor:
-                        if (selectedItem.IsUsed)
+                        if (selectedItem.IsEquip)
                         {
+                            UnEquipArmor(selectedItem);
                             Console.WriteLine($"{selectedItem.Name} 장착을 해제합니다.");
-                            selectedItem.IsUsed = false;
+                            selectedItem.IsEquip = false;
                         }
                         else
                         {
                             EquipArmor(selectedItem);
                             Console.WriteLine($"{selectedItem.Name} 장착을 장착합니다.");
-                            selectedItem.IsUsed = true;
+                            selectedItem.IsEquip = true;
                         }
                         break;
 
@@ -691,6 +692,11 @@ namespace TextRPG
         public void EquipArmor(Item selectedItem)
         {
             player.defense = (player.defense + selectedItem.Value);
+        }
+        
+        public void UnEquipArmor(Item selectedItem)
+        {
+            player.defense = (player.defense - selectedItem.Value);
         }
 
         //  저장하기 장면 함수

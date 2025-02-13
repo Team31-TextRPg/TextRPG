@@ -14,20 +14,20 @@ public class Item
     public ItemType Type {get;}
     public int Value {get;}
     public string Description {get;}
-    public bool IsUsed {get; set;}
+    public bool IsEquip {get; set;}
 
-    public Item (string name, ItemType type, int value, string description, bool isUsed = false) //아이템 생성자
+    public Item (string name, ItemType type, int value, string description, bool isEquip = false) //아이템 생성자
     {
         Name = name;
         Type = type;
         Value = value;
         Description = description;
-        IsUsed = isUsed;
+        IsEquip = isEquip;
     }
 
-    public string ItemDisplay() // 좀 이상함. 장착 관련 부분 차용했는데 
+    public string ItemDisplay() 
     {
-        string str = IsUsed ? "[장착됨] " : "";
+        string str = IsEquip ? "[E] " : "";
         str += $"{Name} | {GetTypeString()} | {Description}";
         return str; 
     }
