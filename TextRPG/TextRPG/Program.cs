@@ -568,8 +568,25 @@ namespace TextRPG
             int rewardGold = sumMonsterLevel * 70;
             Console.WriteLine($"{rewardGold} Gold");
             player.gold += rewardGold;
-            // + 여러 장비나 포션들
 
+            //  랜덤한 확률로 아이템 지급 회복포션 25%, 마나포션 25%, 아이템 중복 획득은 불가능
+            Random rand = new Random();
+
+            int randomResult = rand.Next(0, 4);
+
+            switch (randomResult)
+            {
+                case 0:
+                    Console.WriteLine("회복 포션 x 1");
+                    inventory.AddItem("HealthPotion", 1);
+                    break;
+                case 1:
+                    Console.WriteLine("마나 포션 x 1");
+                    inventory.AddItem("ManaPotion", 1);
+                    break;
+                default:
+                    break;
+            }
 
             Console.WriteLine();
             Console.WriteLine("0. 다음");
