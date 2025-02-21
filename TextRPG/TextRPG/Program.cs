@@ -46,8 +46,8 @@ namespace TextRPG
 
             questsList = new List<Quest>
             {
-                new Quest("","1. 작고 하찮은 미니언 처치","작고 하찮은 미니언들이 너무 많아졌다고 생각하지 않나?\n저놈들을 처치해버려!", "미니언 방패 (방어력 + 5)", 5),
-                new Quest("","2. 마음을 엄습하는 공허충 처치","추운 겨울에도 공허충은 내 옆구리를 시리게 할 수 없지!\n저놈들을 처치해버려!", "공허의 칼날 (공격력 + 5)", 5),
+                new Quest("","1. 작고 하찮은 미니언 처치","작고 하찮은 미니언들이 너무 많아졌다고 생각하지 않나?\n저놈들을 처치해버려!", "미니언 방패 (방어력 + 5)", 5, "1. 수락", 0),
+                new Quest("","2. 마음을 엄습하는 공허충 처치","추운 겨울에도 공허충은 내 옆구리를 시리게 할 수 없지!\n저놈들을 처치해버려!", "공허의 칼날 (공격력 + 5)", 5, "1. 수락", 0)
             };
 
         }
@@ -770,28 +770,60 @@ namespace TextRPG
             Console.WriteLine(questsList[questSelect - 1].QuestId);
             Console.WriteLine(questsList[questSelect - 1].QuestContent);
             Console.WriteLine();
-            Console.WriteLine($"-5마리 처치");
+            Console.WriteLine($"-( {0} / 5 ) 마리 처치", questsList[questSelect - 1].CurrentCount);
             Console.WriteLine("\n- 보상 -");
             Console.WriteLine(questsList[questSelect - 1].QuestReward + " X 1");
             Console.WriteLine(questsList[questSelect - 1].QuestGold + "G\n");
             Console.WriteLine("0.돌아가기");
-            Console.WriteLine("1. 수락");
+            Console.WriteLine("{0}", questsList[questSelect - 1].Button);
             int questOK = cu.GetInput(0, 1);
             switch (questOK)
             {
+                // 경우1.  퀘스트를 아예 수락하지 않은 경우
                 case 0:
                     QuestScreen();
                     break;
+                // 경우2. 퀘스트를 수락한 경우
                 case 1:
                     Console.WriteLine();
                     Console.Write("퀘스트를 수락하셨습니다.");
                     questsList[questSelect - 1].questAccept = true;
                     questsList[questSelect - 1].Acceppt();
+                    questsList[questSelect - 1].Button = "1. 보상 받기";
                     QuestScreen();
-                    break;
             }
-
         }
 
+
+            
+        
+                    //int rewardSelect = cu.GetInput(0, 1);
+                    //switch (rewardSelect)
+                    //{
+                    //    case 0:   // 0. 돌아가기를 누른 경우
+                    //        QuestScreen();
+                    //        break;
+                    //    case 1:   // 1. 보상 받기를 누른 경우
+                    //        if (questsList[questSelect - 1].clearCheck == true) 
+                    //        {
+                    //            rewardItem.IsPurchase = true;
+                    //            charactor.Inven.Add(rewardItem); // 아이템 보상 인벤토리에 추가
+                    //                                             // 아이템에 따른 능력치 추가
+                    //                                             // 골드 보상 추가
+                    //        }
+                    //        else  
+                    //        {
+                    //            Console.WriteLine("해당 보상을 이미 습득 하셨습니다.");
+                    //        }
+                            
+                    //        break;
+                            
+                    
+                
+                       
+                    
+        
+
     }
+
 }
